@@ -11,15 +11,17 @@ import SnapKit
 class MainView: UIView {
     
     let mesoStack = MesoStackView()
+    let categorySegment = CategorySegmentControl(frame: .zero)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
         
         let titleLabel = makeTitleLabel()
-        
+
         addSubview(titleLabel)
         addSubview(mesoStack)
+        addSubview(categorySegment)
         
         titleLabel.snp.makeConstraints {
             $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
@@ -30,13 +32,16 @@ class MainView: UIView {
             $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             $0.top.equalTo(titleLabel.snp.bottom).offset(10)
         }
+        
+        categorySegment.snp.makeConstraints {
+            $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
+            $0.top.equalTo(mesoStack.snp.bottom).offset(10)
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-
 }
 
 //MARK: Configure Components

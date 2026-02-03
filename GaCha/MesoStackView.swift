@@ -21,6 +21,7 @@ class MesoStackView: UIStackView {
         title.setContentCompressionResistancePriority(.defaultLow, for: .horizontal) // 크기 축소 우선순위 설정
         title.textAlignment = .right // 텍스트 오른쪽정렬
         
+        //TODO: 메소(NSNumber 타입) overflow 방지 - 보유 메소 표시 제한 필요
         setCurrentMesoLabel(meso: 999999)
         
         addArrangedSubview(title)
@@ -28,8 +29,6 @@ class MesoStackView: UIStackView {
         
         axis = .horizontal
         spacing = 8
-        
-        
     }
     
     required init(coder: NSCoder) {
@@ -39,17 +38,6 @@ class MesoStackView: UIStackView {
 
 //MARK: Set Component Contents
 extension MesoStackView {
-    // 보유 메소 타이틀 레이블 생성
-    func makeCurrentMesoTitleLabel() -> UILabel {
-        let label = UILabel()
-        
-        label.text = "보유 메소"
-        label.textColor = .black
-        label.font = .boldSystemFont(ofSize: 16)
-        
-        return label
-    }
-    
     // 보유 메소 레이블 설정
     func setCurrentMesoLabel(meso: NSNumber) {
         // 메소 #,### 형태 문자열로 변환
@@ -62,6 +50,17 @@ extension MesoStackView {
 
 //MARK: Configure Components
 extension MesoStackView {
+    // 보유 메소 타이틀 레이블 생성
+    func makeCurrentMesoTitleLabel() -> UILabel {
+        let label = UILabel()
+        
+        label.text = "보유 메소"
+        label.textColor = .black
+        label.font = .boldSystemFont(ofSize: 16)
+        
+        return label
+    }
+    
     // 보유 메소 레이블 config 설정
     func configCurrentMesoLabel() {
         currentMesoLabel.textColor = .black
