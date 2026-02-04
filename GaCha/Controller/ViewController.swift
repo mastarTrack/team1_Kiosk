@@ -50,8 +50,9 @@ extension ViewController: CategorySegmentedControlDelegate {
 extension ViewController {
     private func updateItemList() {
         if selectedCategory == GachaCategory.gacha.rawValue {
-            self.itemList = ItemData.allItems.filter { $0.grade == "레전더리" }
+            mainView.itemTableView.isHidden = true
         } else {
+            mainView.itemTableView.isHidden = false
             self.itemList = ItemData.allItems.filter {
                 $0.category == selectedCategory && $0.grade == "일반" }
         }
