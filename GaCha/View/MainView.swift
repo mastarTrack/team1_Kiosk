@@ -29,6 +29,7 @@ class MainView: UIView {
         super.init(frame: frame)
         backgroundColor = .white
         setActionButtons()
+        itemTableView.allowsMultipleSelection = true
         
         let titleLabel = makeTitleLabel()
 
