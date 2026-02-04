@@ -32,6 +32,7 @@ class ViewController: UIViewController {
 extension ViewController {
     private func setDelegate() {
         mainView.categorySegment.delegate = self
+        mainView.delegate = self
     }
 }
 
@@ -83,4 +84,14 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: UITableViewDelegate {
     
+}
+
+extension ViewController: MainViewDelegate {
+    func didTapPurchaseButton() {
+        print("구매하기 버튼 선택")
+    }
+    
+    func didTapInventoryButton() {
+        print("인벤토리 버튼 선택")
+    }
 }

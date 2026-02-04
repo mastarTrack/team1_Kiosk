@@ -8,7 +8,14 @@
 import UIKit
 import SnapKit
 
+protocol MainViewDelegate: AnyObject {
+    func didTapPurchaseButton()
+    func didTapInventoryButton()
+}
+
 class MainView: UIView {
+    
+    weak var delegate: MainViewDelegate?
     
     private let mesoStack = MesoStackView()
     
@@ -21,6 +28,7 @@ class MainView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
+        setActionButtons()
         
         let titleLabel = makeTitleLabel()
 
@@ -86,5 +94,21 @@ extension MainView {
         
         return label
     }
+}
 
+extension MainView {
+    private func setActionButtons() {
+        purchaseButton.addTarget(self, action: #selector(purchaseButtonTapped), for: .touchUpInside)
+        inventoryButton.addTarget(self, action: #selector(inventoryButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc
+    private func purchaseButtonTapped() {
+        delegate?.didTapPurchaseButton()
+    }
+    
+    @objc
+    private func inventoryButtonTapped() {
+        delegate?.didTapInventoryButton()
+    }
 }
