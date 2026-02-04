@@ -9,7 +9,7 @@ import SnapKit
 
 class MesoStackView: UIStackView {
     // 현재 보유 메소 레이블
-    let currentMesoLabel = UILabel()
+    private let currentMesoLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,6 +21,7 @@ class MesoStackView: UIStackView {
         title.setContentCompressionResistancePriority(.defaultLow, for: .horizontal) // 크기 축소 우선순위 설정
         title.textAlignment = .right // 텍스트 오른쪽정렬
         
+        setAttributes()
         //TODO: 메소(NSNumber 타입) overflow 방지 - 보유 메소 표시 제한 필요
         setCurrentMesoLabel(meso: 999999)
         
@@ -51,7 +52,7 @@ extension MesoStackView {
 //MARK: Configure Components
 extension MesoStackView {
     // 보유 메소 타이틀 레이블 생성
-    func makeCurrentMesoTitleLabel() -> UILabel {
+    private func makeCurrentMesoTitleLabel() -> UILabel {
         let label = UILabel()
         
         label.text = "보유 메소"
@@ -62,7 +63,7 @@ extension MesoStackView {
     }
     
     // 보유 메소 레이블 config 설정
-    func configCurrentMesoLabel() {
+    private func setAttributes() {
         currentMesoLabel.textColor = .black
         currentMesoLabel.font = .systemFont(ofSize: 16)
     }

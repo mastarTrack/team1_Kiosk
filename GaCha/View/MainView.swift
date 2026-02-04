@@ -10,8 +10,8 @@ import SnapKit
 
 class MainView: UIView {
     
-    let mesoStack = MesoStackView()
-    let categorySegment = CategorySegmentControl(frame: .zero)
+    private let mesoStack = MesoStackView()
+    let categorySegment = CategorySegmentedControl(frame: .zero)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,6 +22,7 @@ class MainView: UIView {
         addSubview(titleLabel)
         addSubview(mesoStack)
         addSubview(categorySegment)
+        
         
         titleLabel.snp.makeConstraints {
             $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
@@ -37,6 +38,7 @@ class MainView: UIView {
             $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             $0.top.equalTo(mesoStack.snp.bottom).offset(10)
         }
+        
     }
     
     required init?(coder: NSCoder) {
@@ -47,7 +49,7 @@ class MainView: UIView {
 //MARK: Configure Components
 extension MainView {
     // 타이틀 레이블 생성
-    func makeTitleLabel() -> UILabel {
+    private func makeTitleLabel() -> UILabel {
         let label = UILabel()
         
         label.text = "GaCha!"
@@ -57,10 +59,5 @@ extension MainView {
         
         return label
     }
-
-}
-
-//MARK: Set Component Contents
-extension MainView {
 
 }
