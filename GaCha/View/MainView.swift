@@ -11,6 +11,9 @@ import SnapKit
 class MainView: UIView {
     
     private let mesoStack = MesoStackView()
+    
+    let itemTableView = ItemTableView()
+    
     let categorySegment = CategorySegmentedControl(frame: .zero)
     
     override init(frame: CGRect) {
@@ -22,6 +25,7 @@ class MainView: UIView {
         addSubview(titleLabel)
         addSubview(mesoStack)
         addSubview(categorySegment)
+        addSubview(itemTableView)
         
         
         titleLabel.snp.makeConstraints {
@@ -37,6 +41,12 @@ class MainView: UIView {
         categorySegment.snp.makeConstraints {
             $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             $0.top.equalTo(mesoStack.snp.bottom).offset(10)
+        }
+        
+        itemTableView.snp.makeConstraints {
+            $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
+            $0.top.equalTo(categorySegment.snp.bottom).offset(10)
+            $0.bottom.equalTo(safeAreaLayoutGuide)
         }
         
     }
