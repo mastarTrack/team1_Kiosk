@@ -52,8 +52,10 @@ extension ViewController {
     private func updateItemList() {
         if selectedCategory == GachaCategory.gacha.rawValue {
             mainView.itemTableView.isHidden = true
+            mainView.purchaseButton.isHidden = true
         } else {
             mainView.itemTableView.isHidden = false
+            mainView.purchaseButton.isHidden = false
             self.itemList = ItemData.allItems.filter {
                 $0.category == selectedCategory && $0.grade == "일반" }
         }
