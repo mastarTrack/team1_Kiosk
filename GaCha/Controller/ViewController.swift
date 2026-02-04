@@ -15,6 +15,10 @@ class ViewController: UIViewController {
 //    private let allItemList: [Item] = ItemData.allItems
     private var itemList: [Item] = []
     
+    lazy var dataSource: [Section] = [
+        .first(self.itemList)
+    ]
+    
     override func loadView() {
         self.view = mainView
     }
@@ -32,6 +36,8 @@ class ViewController: UIViewController {
 extension ViewController {
     private func setDelegate() {
         mainView.categorySegment.delegate = self
+        mainView.gachaView.dataSource = self
+        mainView.gachaView.register(LegendaryListCollectionCell.self, forCellWithReuseIdentifier: "Legendary Item Cell")
     }
 }
 
@@ -51,7 +57,12 @@ extension ViewController {
     private func updateItemList() {
         if selectedCategory == GachaCategory.gacha.rawValue {
             mainView.itemTableView.isHidden = true
+            mainView.gachaView.isHidden = false
+            self.itemList = ItemData.allItems.filter {
+                $0.grade == "레전더리"
+            }
         } else {
+            mainView.gachaView.isHidden = true
             mainView.itemTableView.isHidden = false
             self.itemList = ItemData.allItems.filter {
                 $0.category == selectedCategory && $0.grade == "일반" }
@@ -83,4 +94,40 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: UITableViewDelegate {
     
+}
+
+// GachaView CollectionView delegate 정의
+extension ViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        switch dataSource[section] {
+        case .first(let items): return items.count // 0번째 섹션일 때
+        }
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        // 섹션의 개수
+        return dataSource.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = mainView.gachaView.dequeueReusableCell(withReuseIdentifier: "Legendary Item Cell", for: indexPath) as! LegendaryListCollectionCell
+        
+        switch dataSource[indexPath.section] {
+        case .first(let items):
+            cell.config(with: items[indexPath.item])
+        }
+
+        return cell
+    }
+    
+    
+}
+
+enum Section {
+    case first([Item])
+}
+
+extension ViewController {
+
 }
