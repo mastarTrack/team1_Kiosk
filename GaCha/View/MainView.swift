@@ -13,6 +13,8 @@ class MainView: UIView {
     private let mesoStack = MesoStackView()
     
     let itemTableView = ItemTableView()
+    let purchaseButton = ActionButton(title: "구매하기")
+    let inventoryButton = ActionButton(title: "인벤토리")
     
     let categorySegment = CategorySegmentedControl(frame: .zero)
     
@@ -23,9 +25,11 @@ class MainView: UIView {
         let titleLabel = makeTitleLabel()
 
         addSubview(titleLabel)
+        addSubview(inventoryButton)
         addSubview(mesoStack)
         addSubview(categorySegment)
         addSubview(itemTableView)
+        addSubview(purchaseButton)
         
         
         titleLabel.snp.makeConstraints {
@@ -33,20 +37,33 @@ class MainView: UIView {
             $0.top.equalTo(safeAreaLayoutGuide).offset(10)
         }
         
+        inventoryButton.snp.makeConstraints {
+            $0.leading.equalTo(safeAreaLayoutGuide).offset(20)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(10)
+            $0.width.equalTo(100)
+        }
+        
         mesoStack.snp.makeConstraints {
-            $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
+            $0.leading.equalTo(inventoryButton.snp.trailing)
+            $0.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             $0.top.equalTo(titleLabel.snp.bottom).offset(10)
         }
         
         categorySegment.snp.makeConstraints {
             $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
-            $0.top.equalTo(mesoStack.snp.bottom).offset(10)
+            $0.top.equalTo(inventoryButton.snp.bottom).offset(10)
         }
         
         itemTableView.snp.makeConstraints {
             $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             $0.top.equalTo(categorySegment.snp.bottom).offset(10)
+            $0.bottom.equalTo(purchaseButton.snp.top).offset(-20)
+        }
+        
+        purchaseButton.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide)
+            $0.trailing.equalTo(safeAreaLayoutGuide).offset(-20)
+            $0.width.equalTo(100)
         }
         
     }
