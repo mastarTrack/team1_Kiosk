@@ -90,7 +90,16 @@ extension ViewController: UITableViewDelegate {
 
 extension ViewController: MainViewDelegate {
     func didTapPurchaseButton() {
-        print("구매하기 버튼 선택")
+        guard let selectedPaths = mainView.itemTableView.indexPathsForSelectedRows else {
+            print("선택된 아이템이 없습니다.")
+            return
+        }
+        
+        for indexPath in selectedPaths {
+            let selectedItem = itemList[indexPath.row]
+            print("\(selectedItem.name) 구매")
+        }
+        
     }
     
     func didTapInventoryButton() {
