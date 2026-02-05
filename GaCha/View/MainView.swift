@@ -70,11 +70,9 @@ class MainView: UIView {
         }
         
         gachaCollectionView.snp.makeConstraints {
-            $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
+            $0.leading.trailing.bottom.equalTo(safeAreaLayoutGuide).inset(20)
             $0.top.equalTo(categorySegment.snp.bottom).offset(10)
-            $0.bottom.equalTo(purchaseButton.snp.top).offset(-20)
         }
-        
     }
     
     required init?(coder: NSCoder) {

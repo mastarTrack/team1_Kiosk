@@ -14,18 +14,8 @@ class ViewController: UIViewController {
     
 //    private let allItemList: [Item] = ItemData.allItems
     private var itemList: [Item] = []
-    
-    lazy var dataSource: [Section] = [
-        .first(self.itemList),
-        .second(["1회 뽑기", "5회 뽑기"]),
-        .third([
-            Item(id: 0, name: "페어리피코", category: "무기", grade: "레전더리", price: 300, imageName: "legendary_weapon1"),
-            Item(id: 0, name: "페어리피코", category: "무기", grade: "레전더리", price: 300, imageName: "legendary_weapon1"),
-            Item(id: 0, name: "페어리피코", category: "무기", grade: "레전더리", price: 300, imageName: "legendary_weapon1"),
-            Item(id: 0, name: "페어리피코", category: "무기", grade: "레전더리", price: 300, imageName: "legendary_weapon1"),
-            Item(id: 0, name: "페어리피코", category: "무기", grade: "레전더리", price: 300, imageName: "legendary_weapon1"),
-        ])
-    ]
+    private var dataSource: [Section] = []
+    private var gachaResult: [Item] = []
     
     override func loadView() {
         self.view = mainView
@@ -37,6 +27,7 @@ class ViewController: UIViewController {
         setItemTableView()
         
         updateItemList()
+        setGachaCollectionViewDataSource()
     }
 }
 
@@ -44,6 +35,7 @@ class ViewController: UIViewController {
 extension ViewController {
     private func setDelegate() {
         mainView.categorySegment.delegate = self
+        mainView.gachaCollectionView.delegate = self
         mainView.gachaCollectionView.dataSource = self
     }
 }
@@ -60,6 +52,7 @@ extension ViewController: CategorySegmentedControlDelegate {
     }
 }
 
+//MARK: Set Data
 extension ViewController {
     private func updateItemList() {
         if selectedCategory == GachaCategory.gacha.rawValue {
@@ -78,6 +71,14 @@ extension ViewController {
             self.itemList = ItemData.allItems.filter {
                 $0.category == selectedCategory && $0.grade == "일반" }
         }
+    }
+    
+    private func setGachaCollectionViewDataSource() {
+        dataSource = [
+            .first(self.itemList),
+            .second(["1회 뽑기", "5회 뽑기"]),
+            .third([])
+        ]
     }
 }
 
@@ -128,7 +129,12 @@ extension ViewController: UICollectionViewDataSource {
         case "HeaderKind":
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! LegendaryItemHeaderView
             
-            headerView.label.text = "뽑기"
+            if indexPath.section == 0 {
+                headerView.configLegendaryItemSection()
+            } else if indexPath.section == 2 {
+                headerView.configResultTableSection()
+            }
+            
             return headerView
         case "FooterKind":
             let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath) as! LegendaryItemFooterView
@@ -144,8 +150,6 @@ extension ViewController: UICollectionViewDataSource {
             
         default: return UICollectionReusableView()
         }
-        
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -174,19 +178,26 @@ extension ViewController: UICollectionViewDataSource {
             default: break
             }
             return cell
-
+            
         default:
             return UICollectionViewCell()
         }
     }
-    
-    
 }
 
-enum Section {
-    case first([Item])
-    case second([String])
-    case third([Item])
+extension ViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 1 && indexPath.item == 0 {
+            guard let result = itemList.randomElement() else { return }
+            print("1번 뽑기")
+//            gachaResult.count == 5 ? gachaResult.removeLast() : ()
+//            gachaResult.append(result)
+        } else if indexPath.section == 1 && indexPath.item == 1 {
+            print("5번 뽑기")
+//            guard let result = itemList.randomElement() else { return }
+//            gachaResult.append(result)
+        } else {
+            print("다른 셀 선택")
+        }
+    }
 }
-
-// scrolloffset

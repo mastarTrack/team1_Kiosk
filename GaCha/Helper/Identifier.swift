@@ -24,3 +24,8 @@ enum CellIdentifier: String {
 //    }
 //}
 
+enum Section {
+    case first([Item])
+    case second([String])
+    case third([Item])
+}

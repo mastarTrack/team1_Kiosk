@@ -20,7 +20,7 @@ class LegendaryItemCell: UICollectionViewCell {
         contentView.addSubview(nameLabel)
         
         imageView.snp.makeConstraints {
-            $0.width.equalToSuperview().multipliedBy(0.35)
+            $0.width.equalToSuperview().multipliedBy(0.4)
             $0.height.equalTo(imageView.snp.width)
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().offset(8)

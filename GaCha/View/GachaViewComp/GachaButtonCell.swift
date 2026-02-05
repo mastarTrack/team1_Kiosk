@@ -10,15 +10,25 @@ import SnapKit
 
 class GachaButtonCell: UICollectionViewCell {
     let button = ActionButton(title: "")
+    let label = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.addSubview(button)
-        button.snp.makeConstraints {
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = .white
+        label.backgroundColor = .mushroomOrange
+        
+        contentView.addSubview(label)
+        label.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.width.equalToSuperview().multipliedBy(0.5)
+            $0.width.equalToSuperview()
         }
+//        contentView.addSubview(button)
+//        button.snp.makeConstraints {
+//            $0.center.equalToSuperview()
+//            $0.width.equalToSuperview()
+//        }
     }
     
     required init?(coder: NSCoder) {
@@ -29,5 +39,6 @@ class GachaButtonCell: UICollectionViewCell {
 extension GachaButtonCell {
     func config(with title: String) {
         button.setTitle(title, for: .normal)
+        label.text = title
     }
 }

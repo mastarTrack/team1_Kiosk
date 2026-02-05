@@ -18,14 +18,11 @@ class GachaResultCell: UICollectionViewListCell {
         
         setAttributes()
         setLayout()
-
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-
 }
 
 extension GachaResultCell {
@@ -52,7 +49,7 @@ extension GachaResultCell {
         
         nameLabel.snp.makeConstraints {
             $0.leading.equalTo(imageView.snp.trailing).offset(10)
-            $0.top.equalToSuperview().offset(5)
+            $0.top.equalToSuperview().offset(7)
         }
         
         gradeLabel.snp.makeConstraints {
