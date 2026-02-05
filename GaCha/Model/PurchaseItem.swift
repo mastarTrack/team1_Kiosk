@@ -8,5 +8,9 @@
 import Foundation
 
 struct PurchaseItem {
-    
+    let item: Item
+    var count: Int
+    var totalPrice: Int {
+        return item.price * count
+    }
 }
