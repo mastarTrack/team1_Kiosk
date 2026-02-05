@@ -8,6 +8,7 @@ import UIKit
 import SnapKit
 
 class GachaCollectionView: UICollectionView {
+    var pageControl: UIPageControl?
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
@@ -21,6 +22,7 @@ class GachaCollectionView: UICollectionView {
         register(LegendaryItemFooterView.self, forSupplementaryViewOfKind: "FooterKind", withReuseIdentifier: "Footer")
         register(LegendaryItemCell.self, forCellWithReuseIdentifier: CellIdentifier.legendaryItemCell.rawValue)
         register(GachaButtonCell.self, forCellWithReuseIdentifier: CellIdentifier.gachaButtonCell.rawValue)
+        register(GachaResultCell.self, forCellWithReuseIdentifier: CellIdentifier.gachaResultCell.rawValue)
     }
     
     required init?(coder: NSCoder) {
@@ -33,7 +35,6 @@ extension GachaCollectionView {
         let configuration = UICollectionViewCompositionalLayoutConfiguration()
         configuration.contentInsetsReference = .layoutMargins // 컬렉션뷰 양옆에 공백을 위함
         configuration.interSectionSpacing = 10 // 섹션 간 공백 설정
-
         
         return UICollectionViewCompositionalLayout(sectionProvider: { section, environment in
             // Header 설정
@@ -107,6 +108,11 @@ extension GachaCollectionView {
                 section.interGroupSpacing = spacing * 2 // 그룹 간 공백 설정
                 section.orthogonalScrollingBehavior = .groupPaging // 그룹 간 스크롤 설정 - 페이징 형식
                 
+                section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, environment in
+                    let currentPage = Int(max(0, contentOffset.x / containerSize.width)) // 현재 페이지 = 현재 스크롤 위치(x) / 컬렉션뷰 가로 길이
+                    self?.pageControl?.currentPage = currentPage
+                }
+                
                 section.boundarySupplementaryItems = [headerItem, footerItem]
                 return section
                 
@@ -133,6 +139,12 @@ extension GachaCollectionView {
                 // section 설정
                 let section = NSCollectionLayoutSection(group: group)
                 return section
+                
+            case 2:
+                let configuration = UICollectionLayoutListConfiguration(appearance: .plain)
+                let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: environment)
+                return section
+                
             default: return nil
             }
         }, configuration: configuration)

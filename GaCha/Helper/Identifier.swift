@@ -8,6 +8,7 @@
 enum CellIdentifier: String {
     case legendaryItemCell = "LegendaryItemCell"
     case gachaButtonCell = "GachaButtonCell"
+    case gachaResultCell = "GachaResultCell"
 }
 
 //enum SupplementaryKind {

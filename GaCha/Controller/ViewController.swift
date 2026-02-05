@@ -17,7 +17,14 @@ class ViewController: UIViewController {
     
     lazy var dataSource: [Section] = [
         .first(self.itemList),
-        .second(["1회 뽑기", "5회 뽑기"])
+        .second(["1회 뽑기", "5회 뽑기"]),
+        .third([
+            Item(id: 0, name: "페어리피코", category: "무기", grade: "레전더리", price: 300, imageName: "legendary_weapon1"),
+            Item(id: 0, name: "페어리피코", category: "무기", grade: "레전더리", price: 300, imageName: "legendary_weapon1"),
+            Item(id: 0, name: "페어리피코", category: "무기", grade: "레전더리", price: 300, imageName: "legendary_weapon1"),
+            Item(id: 0, name: "페어리피코", category: "무기", grade: "레전더리", price: 300, imageName: "legendary_weapon1"),
+            Item(id: 0, name: "페어리피코", category: "무기", grade: "레전더리", price: 300, imageName: "legendary_weapon1"),
+        ])
     ]
     
     override func loadView() {
@@ -58,12 +65,16 @@ extension ViewController {
         if selectedCategory == GachaCategory.gacha.rawValue {
             mainView.itemTableView.isHidden = true
             mainView.gachaCollectionView.isHidden = false
+            mainView.purchaseButton.isHidden = true
+            
             self.itemList = ItemData.allItems.filter {
                 $0.grade == "레전더리"
             }
         } else {
             mainView.gachaCollectionView.isHidden = true
             mainView.itemTableView.isHidden = false
+            mainView.purchaseButton.isHidden = false
+            
             self.itemList = ItemData.allItems.filter {
                 $0.category == selectedCategory && $0.grade == "일반" }
         }
@@ -103,6 +114,7 @@ extension ViewController: UICollectionViewDataSource {
         switch dataSource[section] {
         case .first(let items): return items.count // 0번째 섹션 - Legendary Item List 섹션
         case .second(let title): return title.count // 1번째 섹션 - Gacha Button 섹션
+        case .third(let items): return items.count
         }
     }
     
@@ -120,6 +132,8 @@ extension ViewController: UICollectionViewDataSource {
             return headerView
         case "FooterKind":
             let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath) as! LegendaryItemFooterView
+            
+            mainView.gachaCollectionView.pageControl = footerView.pageControl
             
             footerView.pageControl.numberOfPages = switch dataSource[indexPath.section] {
             case .first(let items):
@@ -152,6 +166,15 @@ extension ViewController: UICollectionViewDataSource {
             default: break
             }
             return cell
+        case 2:
+            let cell = mainView.gachaCollectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.gachaResultCell.rawValue, for: indexPath) as! GachaResultCell
+            switch dataSource[indexPath.section] {
+            case .third(let items):
+                cell.config(with: items[indexPath.item])
+            default: break
+            }
+            return cell
+
         default:
             return UICollectionViewCell()
         }
@@ -163,4 +186,7 @@ extension ViewController: UICollectionViewDataSource {
 enum Section {
     case first([Item])
     case second([String])
+    case third([Item])
 }
+
+// scrolloffset

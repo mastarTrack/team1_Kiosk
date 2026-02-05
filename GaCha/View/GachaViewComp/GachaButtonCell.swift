@@ -18,7 +18,7 @@ class GachaButtonCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 12
         contentView.backgroundColor = .mushroomOrange
         label.textColor = .white
-        label.font = .systemFont(ofSize: 15, weight: .semibold)
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
         
         label.snp.makeConstraints {
             $0.center.equalToSuperview()
