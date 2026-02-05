@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     
 //    private let allItemList: [Item] = ItemData.allItems
     private var itemList: [Item] = []
-    private var inventoryItemList: [Int: PurchaseItem] = [:] // 구매한 아이템 담아둘 딕셔너리( item.id : Item)
+    private var purchaseItemList: [Int: PurchaseItem] = [:] // 구매한 아이템 담아둘 딕셔너리( item.id : Item)
     
     override func loadView() {
         self.view = mainView
@@ -99,23 +99,25 @@ extension ViewController: MainViewDelegate {
         for indexPath in selectedPaths {
             let selectedItem = itemList[indexPath.row] // selectedPaths 배열에서 하나하나 뽑아온 데이터 selectedItem
             
-            if var existingPurchase = inventoryItemList[selectedItem.id] { // inventoryItemList에 있다면
+            if var existingPurchase = purchaseItemList[selectedItem.id] { // inventoryItemList에 있다면
                 existingPurchase.count += 1 // [1: [Item, count: 1]]
-                inventoryItemList[selectedItem.id] = existingPurchase
+                purchaseItemList[selectedItem.id] = existingPurchase
             } else { // inventoryItemList에 없을 경우
-                inventoryItemList[selectedItem.id] = PurchaseItem(item: selectedItem, count: 1)
+                purchaseItemList[selectedItem.id] = PurchaseItem(item: selectedItem, count: 1)
             }
 //            print("\(selectedItem.name) 구매")
         }
         selectedPaths.forEach { mainView.itemTableView.deselectRow(at: $0, animated: true) } // 구매버튼 클릭 후 선택 풀기
-        print("인벤토리 현황")
-        inventoryItemList.values.forEach { print("\($0.item.name): \($0.count)개")}
+        print("구매 현황")
+        purchaseItemList.values.forEach { print("\($0.item.name): \($0.count)개")}
         
     }
     
     func didTapInventoryButton() {
         print("인벤토리 버튼 선택")
         let inventoryViewController = InventoryViewController()
+        
+        inventoryViewController.inventoryItemList = Array(purchaseItemList.values) // 구매한 딕셔너리에서 values만 뽑아서 줌
         
         self.present(inventoryViewController, animated: true)
     }

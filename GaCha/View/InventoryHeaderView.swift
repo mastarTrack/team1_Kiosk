@@ -17,6 +17,7 @@ class InventoryHeaderView: UIView {
         
         setAttributes()
         setLayout()
+//        self.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {
