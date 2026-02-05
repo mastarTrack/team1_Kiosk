@@ -16,7 +16,8 @@ class ViewController: UIViewController {
     private var itemList: [Item] = []
     
     lazy var dataSource: [Section] = [
-        .first(self.itemList)
+        .first(self.itemList),
+        .second(["1회 뽑기", "5회 뽑기"])
     ]
     
     override func loadView() {
@@ -36,7 +37,7 @@ class ViewController: UIViewController {
 extension ViewController {
     private func setDelegate() {
         mainView.categorySegment.delegate = self
-        mainView.gachaView.dataSource = self
+        mainView.gachaCollectionView.dataSource = self
     }
 }
 
@@ -56,12 +57,12 @@ extension ViewController {
     private func updateItemList() {
         if selectedCategory == GachaCategory.gacha.rawValue {
             mainView.itemTableView.isHidden = true
-            mainView.gachaView.isHidden = false
+            mainView.gachaCollectionView.isHidden = false
             self.itemList = ItemData.allItems.filter {
                 $0.grade == "레전더리"
             }
         } else {
-            mainView.gachaView.isHidden = true
+            mainView.gachaCollectionView.isHidden = true
             mainView.itemTableView.isHidden = false
             self.itemList = ItemData.allItems.filter {
                 $0.category == selectedCategory && $0.grade == "일반" }
@@ -100,7 +101,8 @@ extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         switch dataSource[section] {
-        case .first(let items): return items.count // 0번째 섹션일 때
+        case .first(let items): return items.count // 0번째 섹션 - Legendary Item List 섹션
+        case .second(let title): return title.count // 1번째 섹션 - Gacha Button 섹션
         }
     }
     
@@ -109,15 +111,50 @@ extension ViewController: UICollectionViewDataSource {
         return dataSource.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = mainView.gachaView.dequeueReusableCell(withReuseIdentifier: "Legendary Item Cell", for: indexPath) as! LegendaryListCollectionCell
-        
-        switch dataSource[indexPath.section] {
-        case .first(let items):
-            cell.config(with: items[indexPath.item])
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case "HeaderKind":
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! LegendaryItemHeaderView
+            
+            headerView.label.text = "뽑기"
+            return headerView
+        case "FooterKind":
+            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath) as! LegendaryItemFooterView
+            
+            footerView.pageControl.numberOfPages = switch dataSource[indexPath.section] {
+            case .first(let items):
+                items.count / 4
+            default: 0
+            }
+            return footerView
+            
+        default: return UICollectionReusableView()
         }
-
-        return cell
+        
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        switch indexPath.section {
+        case 0:
+            let cell = mainView.gachaCollectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.legendaryItemCell.rawValue, for: indexPath) as! LegendaryItemCell
+            switch dataSource[indexPath.section] {
+            case .first(let items):
+                cell.config(with: items[indexPath.item])
+            default: break
+            }
+            return cell
+        case 1:
+            let cell = mainView.gachaCollectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.gachaButtonCell.rawValue, for: indexPath) as! GachaButtonCell
+            switch dataSource[indexPath.section] {
+            case .second(let titles):
+                cell.config(with: titles[indexPath.item])
+            default: break
+            }
+            return cell
+        default:
+            return UICollectionViewCell()
+        }
     }
     
     
@@ -125,8 +162,5 @@ extension ViewController: UICollectionViewDataSource {
 
 enum Section {
     case first([Item])
-}
-
-extension ViewController {
-
+    case second([String])
 }

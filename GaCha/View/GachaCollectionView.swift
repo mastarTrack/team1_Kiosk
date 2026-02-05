@@ -15,7 +15,12 @@ class GachaCollectionView: UICollectionView {
         self.collectionViewLayout = makeCompositionalLayout()
         directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
         
-        register(LegendaryListCollectionCell.self, forCellWithReuseIdentifier: "Legendary Item Cell")
+        isScrollEnabled = false
+        
+        register(LegendaryItemHeaderView.self, forSupplementaryViewOfKind: "HeaderKind", withReuseIdentifier: "Header")
+        register(LegendaryItemFooterView.self, forSupplementaryViewOfKind: "FooterKind", withReuseIdentifier: "Footer")
+        register(LegendaryItemCell.self, forCellWithReuseIdentifier: CellIdentifier.legendaryItemCell.rawValue)
+        register(GachaButtonCell.self, forCellWithReuseIdentifier: CellIdentifier.gachaButtonCell.rawValue)
     }
     
     required init?(coder: NSCoder) {
@@ -26,11 +31,32 @@ class GachaCollectionView: UICollectionView {
 extension GachaCollectionView {
     private func makeCompositionalLayout() -> UICollectionViewLayout {
         let configuration = UICollectionViewCompositionalLayoutConfiguration()
-        configuration.contentInsetsReference = .layoutMargins // 컬렉션뷰 양옆에 공백을 주고 싶을 때 -- ledaing trailing만 가능(레이아웃 잡아줘야함)
+        configuration.contentInsetsReference = .layoutMargins // 컬렉션뷰 양옆에 공백을 위함
+        configuration.interSectionSpacing = 10 // 섹션 간 공백 설정
+
         
         return UICollectionViewCompositionalLayout(sectionProvider: { section, environment in
+            // Header 설정
+            let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(
+                  widthDimension: .fractionalWidth(1),
+                  heightDimension: .absolute(26)
+              ),
+                  elementKind: "HeaderKind",
+                  alignment: .top
+              )
+            
+            // Paging Footer 설정
+            let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .absolute(26)
+            ),
+                elementKind: "FooterKind",
+                alignment: .bottom
+            )
+            
             switch section  {
             case 0:
+              // 기본 설정
                 let spacing: CGFloat = 8
                 
                 // CollectionView 사이즈 - effectiveContentSize는 인셋 빼고 계산, 그냥 contentSize는 인셋 포함하여 계산
@@ -47,7 +73,7 @@ extension GachaCollectionView {
                 // 내부 그룹(아이템 2개 표시 횡렬 그룹) 설정
                 let inLineGroup1 = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .absolute(itemSize)
+                    heightDimension: .absolute(itemSize * 0.7)
                     ),
                     repeatingSubitem: item,
                     count: 2
@@ -55,7 +81,7 @@ extension GachaCollectionView {
                 
                 let inLineGroup2 = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .absolute(itemSize)
+                    heightDimension: .absolute(itemSize * 0.7)
                     ),
                     repeatingSubitem: item,
                     count: 2
@@ -68,7 +94,7 @@ extension GachaCollectionView {
                 // 전체 그룹 설정
                 let entireGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .absolute(itemSize * 2 + spacing)
+                    heightDimension: .absolute(itemSize * 1.4 + spacing)
                 ),
                     subitems: [inLineGroup1, inLineGroup2]
                 )
@@ -78,13 +104,38 @@ extension GachaCollectionView {
                 
               // Section 설정
                 let section = NSCollectionLayoutSection(group: entireGroup)
-                section.interGroupSpacing = spacing // 그룹 간 공백 설정
+                section.interGroupSpacing = spacing * 2 // 그룹 간 공백 설정
                 section.orthogonalScrollingBehavior = .groupPaging // 그룹 간 스크롤 설정 - 페이징 형식
                 
+                section.boundarySupplementaryItems = [headerItem, footerItem]
                 return section
                 
+            case 1:
+                let spacing: CGFloat = 8
+                // CollectionView 사이즈(inset 제외)
+                let containerSize = environment.container.effectiveContentSize
+                
+                // item 설정
+                let itemSize = (containerSize.width - spacing) / 2 // 섹션 0과 동일한 아이템 너비
+                let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .absolute(itemSize),
+                    heightDimension: .absolute(itemSize * 0.3)
+                ))
+                
+                // group 설정
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(itemSize * 0.5)
+                ), repeatingSubitem: item, count: 2)
+                
+                group.interItemSpacing = .fixed(spacing)
+                
+                // section 설정
+                let section = NSCollectionLayoutSection(group: group)
+                return section
             default: return nil
             }
         }, configuration: configuration)
     }
 }
+

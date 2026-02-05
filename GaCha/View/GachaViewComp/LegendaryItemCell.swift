@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class LegendaryListCollectionCell: UICollectionViewCell {
+class LegendaryItemCell: UICollectionViewCell {
     let imageView = UIImageView()
     let nameLabel = UILabel()    
     
@@ -20,7 +20,8 @@ class LegendaryListCollectionCell: UICollectionViewCell {
         contentView.addSubview(nameLabel)
         
         imageView.snp.makeConstraints {
-            $0.width.height.equalTo(50)
+            $0.width.equalToSuperview().multipliedBy(0.35)
+            $0.height.equalTo(imageView.snp.width)
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().offset(8)
         }
@@ -39,7 +40,7 @@ class LegendaryListCollectionCell: UICollectionViewCell {
 }
 
 //MARK: Set attributes
-extension LegendaryListCollectionCell {
+extension LegendaryItemCell {
     func setAttributes() {
         imageView.contentMode = .scaleAspectFit
         
@@ -50,7 +51,7 @@ extension LegendaryListCollectionCell {
 }
 
 //MARK: Set Contents
-extension LegendaryListCollectionCell {
+extension LegendaryItemCell {
     func config(with item: Item) {
         imageView.image = UIImage(named: item.imageName)
         nameLabel.text = item.name

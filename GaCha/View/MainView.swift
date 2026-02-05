@@ -17,7 +17,7 @@ class MainView: UIView {
     let inventoryButton = ActionButton(title: "인벤토리")
     
     let categorySegment = CategorySegmentedControl(frame: .zero)
-    let gachaView = GachaCollectionView(frame: .zero)
+    let gachaCollectionView = GachaCollectionView(frame: .zero)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,7 +31,7 @@ class MainView: UIView {
         addSubview(categorySegment)
         addSubview(itemTableView)
         addSubview(purchaseButton)
-        addSubview(gachaView)
+        addSubview(gachaCollectionView)
         
         
         titleLabel.snp.makeConstraints {
@@ -49,6 +49,7 @@ class MainView: UIView {
             $0.leading.equalTo(inventoryButton.snp.trailing)
             $0.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             $0.top.equalTo(titleLabel.snp.bottom).offset(10)
+            $0.bottom.equalTo(inventoryButton.snp.bottom)
         }
         
         categorySegment.snp.makeConstraints {
@@ -68,7 +69,7 @@ class MainView: UIView {
             $0.width.equalTo(100)
         }
         
-        gachaView.snp.makeConstraints {
+        gachaCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             $0.top.equalTo(categorySegment.snp.bottom).offset(10)
             $0.bottom.equalTo(purchaseButton.snp.top).offset(-20)
