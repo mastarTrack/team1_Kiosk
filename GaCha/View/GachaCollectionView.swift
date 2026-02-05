@@ -10,9 +10,12 @@ import SnapKit
 class GachaCollectionView: UICollectionView {
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: layout)
+        super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         
         self.collectionViewLayout = makeCompositionalLayout()
+        directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        
+        register(LegendaryListCollectionCell.self, forCellWithReuseIdentifier: "Legendary Item Cell")
     }
     
     required init?(coder: NSCoder) {
@@ -21,35 +24,67 @@ class GachaCollectionView: UICollectionView {
 }
 
 extension GachaCollectionView {
-    private func makeCompositionalLayout() -> UICollectionViewCompositionalLayout {
-      // Item 정의: 컬렉션 뷰에 사용될 아이템의 레이아웃을 설정합니다.
-        // 각 아이템의 크기 설정
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.4), // group 내 아이템 너비 == 그룹 너비 * 0.8
-            heightDimension: .fractionalHeight(1) // group 내 아이템 높이 == 그룹 높이
-        )
+    private func makeCompositionalLayout() -> UICollectionViewLayout {
+        let configuration = UICollectionViewCompositionalLayoutConfiguration()
+        configuration.contentInsetsReference = .layoutMargins // 컬렉션뷰 양옆에 공백을 주고 싶을 때 -- ledaing trailing만 가능(레이아웃 잡아줘야함)
         
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        // 각 아이템 간의 간격 설정: 상, 하, 좌, 우 5포인트 여백 추가
-        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-        
-        
-      // Group 정의: 컬렉션 뷰에 사용될 그룹의 레이아웃을 설정합니다.
-        // 그룹 사이즈 설정
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1), // 그룹 너비 == 컬렉션 뷰의 너비
-            heightDimension: .fractionalWidth(1/3) // 그룹 높이 == 컬렉션 뷰의 너비 * 1/3
-        )
-        
-        // 수평 그룹 생성 - item을 2번 반복하는 수평 그룹
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 2)
-//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
-        
-      // Section 정의: 위에서 정의한 그룹을 포함할 섹션을 설정합니다.
-        let section = NSCollectionLayoutSection(group: group)
-        
-        return UICollectionViewCompositionalLayout(section: section)
+        return UICollectionViewCompositionalLayout(sectionProvider: { section, environment in
+            switch section  {
+            case 0:
+                let spacing: CGFloat = 8
+                
+                // CollectionView 사이즈 - effectiveContentSize는 인셋 빼고 계산, 그냥 contentSize는 인셋 포함하여 계산
+                let containerSize = environment.container.effectiveContentSize
+                
+              // Item 설정
+                let itemSize = (containerSize.width - spacing) / 2 // 아이템 1개 가로 사이즈
+                let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .absolute(itemSize),
+                    heightDimension: .fractionalHeight(1)
+                ))
+                
+              // Group 설정
+                // 내부 그룹(아이템 2개 표시 횡렬 그룹) 설정
+                let inLineGroup1 = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(itemSize)
+                    ),
+                    repeatingSubitem: item,
+                    count: 2
+                )
+                
+                let inLineGroup2 = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(itemSize)
+                    ),
+                    repeatingSubitem: item,
+                    count: 2
+                )
+                
+                // 그룹 내부 아이템 간 공백 설정
+                inLineGroup1.interItemSpacing = .fixed(spacing)
+                inLineGroup2.interItemSpacing = .fixed(spacing)
+                
+                // 전체 그룹 설정
+                let entireGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(itemSize * 2 + spacing)
+                ),
+                    subitems: [inLineGroup1, inLineGroup2]
+                )
+                
+                // 전체 그룹 내부 그룹 간 공백 설정
+                entireGroup.interItemSpacing = .fixed(spacing)
+                
+              // Section 설정
+                let section = NSCollectionLayoutSection(group: entireGroup)
+                section.interGroupSpacing = spacing // 그룹 간 공백 설정
+                section.orthogonalScrollingBehavior = .groupPaging // 그룹 간 스크롤 설정 - 페이징 형식
+                
+                return section
+                
+            default: return nil
+            }
+        }, configuration: configuration)
     }
 }

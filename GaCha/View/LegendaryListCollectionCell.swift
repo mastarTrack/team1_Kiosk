@@ -16,8 +16,8 @@ class LegendaryListCollectionCell: UICollectionViewCell {
         super.init(frame: frame)
         setAttributes()
         
-        addSubview(imageView)
-        addSubview(nameLabel)
+        contentView.addSubview(imageView)
+        contentView.addSubview(nameLabel)
         
         imageView.snp.makeConstraints {
             $0.width.height.equalTo(50)

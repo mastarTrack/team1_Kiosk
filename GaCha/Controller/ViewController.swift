@@ -37,7 +37,6 @@ extension ViewController {
     private func setDelegate() {
         mainView.categorySegment.delegate = self
         mainView.gachaView.dataSource = self
-        mainView.gachaView.register(LegendaryListCollectionCell.self, forCellWithReuseIdentifier: "Legendary Item Cell")
     }
 }
 
@@ -96,7 +95,7 @@ extension ViewController: UITableViewDelegate {
     
 }
 
-// GachaView CollectionView delegate 정의
+// GachaView CollectionView datasource 정의
 extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
