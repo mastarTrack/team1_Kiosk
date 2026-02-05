@@ -8,7 +8,13 @@
 import SnapKit
 import UIKit
 
+protocol InventoryViewDelegate: AnyObject {
+    func didTapSellAllButton()
+}
+
 class InventoryView: UIView {
+    
+    weak var delegate: InventoryViewDelegate?
     
     let titleLabel = UILabel()
     let sellAllButton = UIButton()
@@ -21,8 +27,8 @@ class InventoryView: UIView {
         
         setAttributes()
         setLayout()
-        
         inventoryTableView.showsVerticalScrollIndicator = false
+        setAction()
         
     }
     
@@ -67,5 +73,16 @@ extension InventoryView {
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.bottom.equalTo(safeAreaLayoutGuide)
         }
+    }
+}
+
+extension InventoryView {
+    private func setAction() {
+        sellAllButton.addTarget(self, action: #selector(sellAllButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc
+    private func sellAllButtonTapped() {
+        delegate?.didTapSellAllButton()
     }
 }
