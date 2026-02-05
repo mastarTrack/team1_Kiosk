@@ -30,6 +30,7 @@ class MainView: UIView {
         backgroundColor = .white
         setActionButtons()
         itemTableView.allowsMultipleSelection = true
+        itemTableView.showsVerticalScrollIndicator = false
         
         let titleLabel = makeTitleLabel()
 
