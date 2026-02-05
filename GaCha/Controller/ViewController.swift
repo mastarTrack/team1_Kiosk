@@ -115,5 +115,8 @@ extension ViewController: MainViewDelegate {
     
     func didTapInventoryButton() {
         print("인벤토리 버튼 선택")
+        let inventoryViewController = InventoryViewController()
+        
+        self.present(inventoryViewController, animated: true)
     }
 }
