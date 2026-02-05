@@ -59,7 +59,9 @@ extension InventoryItemCell {
     }
     
     private func setLayout() {
+        
         contentView.addSubview(stackView)
+        
         [itemImageView, itemNameLabel, itemCountLabel, itemPriceLabel, sellButton]
             .forEach { stackView.addArrangedSubview($0) }
         

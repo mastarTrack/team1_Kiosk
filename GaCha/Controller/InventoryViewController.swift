@@ -25,13 +25,14 @@ class InventoryViewController: UIViewController {
 extension InventoryViewController {
     private func setInventoryTableView() {
         inventoryView.inventoryTableView.dataSource = self
+        inventoryView.inventoryTableView.delegate = self
         inventoryView.inventoryTableView.register(InventoryItemCell.self, forCellReuseIdentifier: "Cell")
     }
 }
 
 extension InventoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return 20
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -45,5 +46,12 @@ extension InventoryViewController: UITableViewDataSource {
     
 }
 extension InventoryViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return InventoryHeaderView()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
+    }
     
 }
