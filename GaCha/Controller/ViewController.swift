@@ -118,7 +118,13 @@ extension ViewController: MainViewDelegate {
         let inventoryViewController = InventoryViewController()
         
         inventoryViewController.inventoryItemList = Array(purchaseItemList.values) // 구매한 딕셔너리에서 values만 뽑아서 줌
-        
+        inventoryViewController.delegate = self
         self.present(inventoryViewController, animated: true)
+    }
+}
+
+extension ViewController: InventoryViewControllerDelegate {
+    func didUpdateInventoryItemList() {
+        self.purchaseItemList.removeAll()
     }
 }

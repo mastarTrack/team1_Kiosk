@@ -7,7 +7,13 @@
 
 import UIKit
 
+protocol InventoryViewControllerDelegate: AnyObject {
+    func didUpdateInventoryItemList()
+}
+
 class InventoryViewController: UIViewController {
+    
+    weak var delegate: InventoryViewControllerDelegate?
     
     private let inventoryView = InventoryView()
     
@@ -78,7 +84,8 @@ extension InventoryViewController: InventoryViewDelegate {
     func sellAllItem() {
         self.inventoryItemList.removeAll()
         self.inventoryView.inventoryTableView.reloadData()
+        
+        delegate?.didUpdateInventoryItemList()
     }
-    
     
 }
