@@ -129,7 +129,7 @@ extension GachaCollectionView {
           
         // Section 설정
           let section = NSCollectionLayoutSection(group: entireGroup)
-          section.interGroupSpacing = spacing * 2 // 그룹 간 공백 설정
+          section.interGroupSpacing = spacing * 3 // 그룹 간 공백 설정
           section.orthogonalScrollingBehavior = .groupPaging // 그룹 간 스크롤 설정 - 페이징 형식
           
           section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, environment in
@@ -170,7 +170,8 @@ extension GachaCollectionView {
     private func setResultSection(_ environment: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
         let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: environment)
-        configuration.headerTopPadding = 0
+//        configuration.headerTopPadding = 0
+
 
         return section
     }

@@ -43,19 +43,20 @@ extension GachaResultCell {
         contentView.addSubview(gradeLabel)
         
         imageView.snp.makeConstraints {
-            $0.leading.equalToSuperview()
+            $0.top.bottom.leading.equalToSuperview()
             $0.centerY.equalToSuperview()
             $0.size.equalTo(50)
         }
         
         nameLabel.snp.makeConstraints {
             $0.leading.equalTo(imageView.snp.trailing).offset(10)
-            $0.top.equalToSuperview().offset(7)
+            $0.top.equalTo(imageView.snp.top)
         }
         
         gradeLabel.snp.makeConstraints {
             $0.leading.equalTo(imageView.snp.trailing).offset(10)
             $0.top.equalTo(nameLabel.snp.bottom).offset(5)
+            $0.bottom.equalTo(imageView.snp.bottom)
         }
     }
 }
