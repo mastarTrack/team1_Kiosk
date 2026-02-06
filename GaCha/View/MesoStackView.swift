@@ -18,7 +18,6 @@ class MesoStackView: UIStackView {
         let title = makeCurrentMesoTitleLabel()
         
         // 타이틀 레이블 설정
-        title.setContentCompressionResistancePriority(.defaultLow, for: .horizontal) // 크기 축소 우선순위 설정
         title.textAlignment = .right // 텍스트 오른쪽정렬
         
         setAttributes()
@@ -65,5 +64,6 @@ extension MesoStackView {
     private func setAttributes() {
         currentMesoLabel.textColor = .black
         currentMesoLabel.font = .systemFont(ofSize: 16)
+        currentMesoLabel.setContentHuggingPriority(.required, for: .horizontal) // 우선순위 설정
     }
 }

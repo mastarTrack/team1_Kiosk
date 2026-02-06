@@ -43,6 +43,8 @@ extension InventoryItemCell {
         itemNameLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         itemNameLabel.textColor = .black
         itemNameLabel.textAlignment = .left
+        itemNameLabel.adjustsFontSizeToFitWidth = true
+        itemNameLabel.minimumScaleFactor = 0.5
         
         [itemCountLabel, itemPriceLabel].forEach {
             $0.font = .systemFont(ofSize: 13)
