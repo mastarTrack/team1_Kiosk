@@ -8,11 +8,6 @@
 import UIKit
 import SnapKit
 
-protocol MainViewDelegate: AnyObject {
-    func didTapPurchaseButton()
-    func didTapInventoryButton()
-}
-
 class MainView: UIView {
     
     weak var delegate: MainViewDelegate?

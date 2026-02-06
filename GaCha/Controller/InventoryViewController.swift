@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol InventoryViewControllerDelegate: AnyObject {
-    func didUpdateInventoryItemList(with updatedItemList: [PurchaseItem])
-}
-
 class InventoryViewController: UIViewController {
     
     weak var delegate: InventoryViewControllerDelegate?

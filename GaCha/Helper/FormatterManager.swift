@@ -14,7 +14,6 @@ class FormatterManager {
         
         let formattedMesoToString = numberFormatter.string(from: NSNumber(value: meso)) ?? "\(meso)"
         return "\(formattedMesoToString) 메소"
-
     }
 }
 
