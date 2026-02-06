@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8A4A27C12F31DE5D000C3E0C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8A4A27C02F31DE5D000C3E0C /* SnapKit */; };
-		8A9C511C2F35FEFA00CAFF55 /* IdentifiedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 8A9C511B2F35FEFA00CAFF55 /* IdentifiedCollections */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,7 +41,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A4A27C12F31DE5D000C3E0C /* SnapKit in Frameworks */,
-				8A9C511C2F35FEFA00CAFF55 /* IdentifiedCollections in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,7 +84,6 @@
 			name = GaCha;
 			packageProductDependencies = (
 				8A4A27C02F31DE5D000C3E0C /* SnapKit */,
-				8A9C511B2F35FEFA00CAFF55 /* IdentifiedCollections */,
 			);
 			productName = GaCha;
 			productReference = 8A4A27A72F31DE48000C3E0C /* GaCha.app */;
@@ -118,7 +115,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				8A4A27BF2F31DE5D000C3E0C /* XCRemoteSwiftPackageReference "SnapKit" */,
-				8A9C511A2F35FEFA00CAFF55 /* XCRemoteSwiftPackageReference "swift-identified-collections" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8A4A27A82F31DE48000C3E0C /* Products */;
@@ -372,14 +368,6 @@
 				minimumVersion = 5.7.1;
 			};
 		};
-		8A9C511A2F35FEFA00CAFF55 /* XCRemoteSwiftPackageReference "swift-identified-collections" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-identified-collections";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -387,11 +375,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8A4A27BF2F31DE5D000C3E0C /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		8A9C511B2F35FEFA00CAFF55 /* IdentifiedCollections */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8A9C511A2F35FEFA00CAFF55 /* XCRemoteSwiftPackageReference "swift-identified-collections" */;
-			productName = IdentifiedCollections;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
