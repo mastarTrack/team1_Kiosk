@@ -48,7 +48,7 @@ extension InventoryViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! InventoryItemCell
         let purchaseItem = DataManager.shared.inventoryList[indexPath.row]
         cell.config(with: purchaseItem)
-        
+        cell.selectionStyle = .none
         cell.delegate = self // InventoryItemCell의 Delegate 선언
         return cell
     }
