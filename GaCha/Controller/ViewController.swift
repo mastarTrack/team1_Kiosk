@@ -215,6 +215,8 @@ extension ViewController: UICollectionViewDelegate {
         } else {
             print("다른 셀 선택")
         }
+    }
+}
 extension ViewController: MainViewDelegate {
     func didTapPurchaseButton() {
         guard let selectedPaths = mainView.itemTableView.indexPathsForSelectedRows else {
@@ -231,7 +233,7 @@ extension ViewController: MainViewDelegate {
             } else { // inventoryItemList에 없을 경우
                 inventoryItemList[selectedItem.id] = PurchaseItem(item: selectedItem, count: 1)
             }
-//            print("\(selectedItem.name) 구매")
+            //            print("\(selectedItem.name) 구매")
         }
         selectedPaths.forEach { mainView.itemTableView.deselectRow(at: $0, animated: true) } // 구매버튼 클릭 후 선택 풀기
         print("인벤토리 현황")
