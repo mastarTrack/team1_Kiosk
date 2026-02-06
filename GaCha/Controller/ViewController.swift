@@ -259,6 +259,7 @@ extension ViewController: InventoryViewControllerDelegate {
         updatedItemList.forEach { purchaseItem in
             self.purchaseItemList[purchaseItem.item.id] = purchaseItem
         }
+        mainView.mesoStack.updateMeso()
     }
 }
 

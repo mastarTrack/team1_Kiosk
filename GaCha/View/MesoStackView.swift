@@ -41,23 +41,12 @@ class MesoStackView: UIStackView {
 extension MesoStackView {
     func updateMeso() {
         let currentMeso = Meso.shared.getCurrentMeso()
-        self.setCurrentMesoLabel(meso: currentMeso)
+        
+        let formatter = FormatterManager()
+        currentMesoLabel.text = formatter.setMesoToString(meso: currentMeso)
     }
 }
 
-//MARK: Set Component Contents
-extension MesoStackView {
-    // 보유 메소 레이블 설정
-    func setCurrentMesoLabel(meso: Int) {
-        // 메소 #,### 형태 문자열로 변환
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .decimal
-        
-        if let formattedMesoToString = numberFormatter.string(from: NSNumber(value: meso)) {
-            currentMesoLabel.text = "\(formattedMesoToString) 메소"
-        }
-    }
-}
 
 //MARK: Configure Components
 extension MesoStackView {

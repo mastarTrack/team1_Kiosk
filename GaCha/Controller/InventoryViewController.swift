@@ -7,7 +7,6 @@
 
 import UIKit
 
-//TODO: removeAll만 구현되어있음. 개별 판매하고나서 업데이트하는 로직 필요
 protocol InventoryViewControllerDelegate: AnyObject {
     func didUpdateInventoryItemList(with updatedItemList: [PurchaseItem])
 }
@@ -85,6 +84,14 @@ extension InventoryViewController: InventoryViewDelegate {
     }
     
     func sellAllItem() {
+        
+        // 받게되는 전체 메소
+        let totalMeso = inventoryItemList.reduce(0) { sum, purchaseItem in
+            let price = Double(purchaseItem.item.price * purchaseItem.count)
+            return sum + Int(price * 0.4)
+        }
+        Meso.shared.addMeso(amount: totalMeso)
+        
         self.inventoryItemList.removeAll()
         self.inventoryView.inventoryTableView.reloadData()
         
@@ -123,6 +130,7 @@ extension InventoryViewController: InventoryItemCellDelegate {
     //TODO: 입력이 음수거나 보유 개수보다 클 경우 예외처리 필요(showErrorAlert로 처리 완료)
     func sellItem(indexPath: IndexPath, count: Int) {
         let itemIndex = indexPath.row
+        let selectedItem = inventoryItemList[itemIndex]
         let currentItemCount = inventoryItemList[itemIndex].count
         
         if count <= 0 || currentItemCount < count { // 입력된 값이 0보다 작거나 현재 개수보다 많을 경우
@@ -136,6 +144,9 @@ extension InventoryViewController: InventoryItemCellDelegate {
             inventoryItemList[itemIndex].count -= count
             inventoryView.inventoryTableView.reloadRows(at: [indexPath], with: .automatic)
         }
+        let originalEranedMeso = Double(selectedItem.item.price * count)
+        let earnedMeso = Int(originalEranedMeso * 0.4)
+        Meso.shared.addMeso(amount: earnedMeso)
         delegate?.didUpdateInventoryItemList(with: inventoryItemList)
     }
 }

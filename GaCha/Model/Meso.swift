@@ -10,7 +10,7 @@ import Foundation
 class Meso {
     
     static let shared = Meso()
-    private var meso: Int = 15000000
+    private var meso: Int = 10000
     
     func getCurrentMeso() -> Int {
         return meso
