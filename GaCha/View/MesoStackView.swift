@@ -22,7 +22,8 @@ class MesoStackView: UIStackView {
         title.textAlignment = .right // 텍스트 오른쪽정렬
         
         setAttributes()
-        setCurrentMesoLabel(meso: 999999)
+        
+        updateMeso()
         
         addArrangedSubview(title)
         addArrangedSubview(currentMesoLabel)
@@ -36,15 +37,25 @@ class MesoStackView: UIStackView {
     }
 }
 
+// Meso 모델로부터 현재의 메소를 불러옴.
+extension MesoStackView {
+    func updateMeso() {
+        let currentMeso = Meso.shared.getCurrentMeso()
+        self.setCurrentMesoLabel(meso: currentMeso)
+    }
+}
+
 //MARK: Set Component Contents
 extension MesoStackView {
     // 보유 메소 레이블 설정
-    func setCurrentMesoLabel(meso: NSNumber) {
+    func setCurrentMesoLabel(meso: Int) {
         // 메소 #,### 형태 문자열로 변환
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
         
-        currentMesoLabel.text = numberFormatter.string(from: meso)
+        if let formattedMesoToString = numberFormatter.string(from: NSNumber(value: meso)) {
+            currentMesoLabel.text = "\(formattedMesoToString) 메소"
+        }
     }
 }
 

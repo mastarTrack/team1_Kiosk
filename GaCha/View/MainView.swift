@@ -17,7 +17,7 @@ class MainView: UIView {
     
     weak var delegate: MainViewDelegate?
     
-    private let mesoStack = MesoStackView()
+    let mesoStack = MesoStackView()
     
     let itemTableView = ItemTableView()
     let purchaseButton = ActionButton(title: "구매하기")
