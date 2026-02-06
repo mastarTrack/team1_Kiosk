@@ -128,18 +128,14 @@ extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case "HeaderKind":
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! LegendaryItemHeaderView
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! GachaCollectionHeaderView
             
-            if indexPath.section == 0 { // Legendary Item List 섹션
-                headerView.configLegendaryItemSection()
-            } else if indexPath.section == 2 { // Result Table 섹션
-                headerView.configResultTableSection()
-            }
-            
+            headerView.config(indexPath.section)
+ 
             return headerView
             
         case "FooterKind":
-            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath) as! LegendaryItemFooterView
+            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath) as! GachaCollectionFooterView
             
             mainView.gachaCollectionView.pageControl = footerView.pageControl // 컬렉션뷰에서 footerView의 페이지컨트롤 참조
             
@@ -151,6 +147,11 @@ extension ViewController: UICollectionViewDataSource {
             }
             
             return footerView
+            
+        case "BadgeKind":
+            let badgeView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Badge", for: indexPath) as! MesoBadgeView
+            if indexPath.section == 1 { badgeView.config(indexPath.item) }
+            return badgeView
             
         default: return UICollectionReusableView()
         }
@@ -193,33 +194,19 @@ extension ViewController: UICollectionViewDataSource {
 
 extension ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let items = ItemData.allItems
+        guard indexPath.section == 1 else { return }
         
-        if indexPath.section == 1 && indexPath.item == 0 {
-            // 1번 뽑기
-            guard let result = items.randomElement() else { return } // 랜덤 아이템
-
-            if gachaResult.count == 5 { gachaResult.removeFirst() } // 뽑기 결과가 5개 존재한다면 마지막 결과를 삭제
-            gachaResult.append(result) // 신규 결과 추가
-            purchaseItemList[result.id, default: PurchaseItem(item: result, count: 0)].count += 1 // 구매 목록 count += 1
-            
-            dataSource[2] = .third(gachaResult.reversed()) // 데이터소스 갱신
-            mainView.gachaCollectionView.reloadData() // 컬렉션뷰 갱신
-        } else if indexPath.section == 1 && indexPath.item == 1 {
-            // 5번 뽑기
-            var tempResult:[Item] = []
-            for _ in 0..<5 {
-                guard let result = items.randomElement() else { return } // 랜덤 아이템
-                tempResult.append(result) // 임시 배열에 저장
-                purchaseItemList[result.id, default: PurchaseItem(item: result, count: 0)].count += 1 // 구매 목록 count += 1
-            }
-            gachaResult = tempResult // 결과 배열에 임시배열 대입
-            
-            dataSource[2] = .third(gachaResult.reversed()) // 데이터소스 갱신
-            mainView.gachaCollectionView.reloadData() // 컬렉션뷰 갱신
+        if indexPath.item == 0 {
+            gacha()
+        } else {
+            for _ in 0..<5 { gacha() }
         }
+        
+        dataSource[2] = .third(gachaResult.reversed()) // 데이터소스 갱신
+        mainView.gachaCollectionView.reloadData() // 컬렉션뷰 갱신
     }
 }
+
 extension ViewController: MainViewDelegate {
     func didTapPurchaseButton() {
         guard let selectedPaths = mainView.itemTableView.indexPathsForSelectedRows else {
@@ -257,5 +244,22 @@ extension ViewController: MainViewDelegate {
 extension ViewController: InventoryViewControllerDelegate {
     func didUpdateInventoryItemList() {
         self.purchaseItemList.removeAll()
+    }
+}
+
+extension ViewController {
+    func gacha() {
+        let items = ItemData.allItems.filter { $0.grade == "일반" }
+        let num = Int.random(in: 1...1000) // 1/1000 확률
+        
+        // num이 1일 때: itemList(레전더리 아이템 목록)에서 결과 추출
+        // num이 1이 아닐 때: items(일반 아이템)에서 결과 추출
+        let result = num == 1 ? itemList.randomElement() : items.randomElement()
+        
+        if gachaResult.count == 5 { gachaResult.removeFirst() }
+        
+        guard let result else { return }
+        gachaResult.append(result)
+        purchaseItemList[result.id, default: PurchaseItem(item: result, count: 0)].count += 1
     }
 }

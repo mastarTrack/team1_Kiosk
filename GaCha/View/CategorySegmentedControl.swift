@@ -17,7 +17,7 @@ class CategorySegmentedControl: UISegmentedControl {
         
         selectedSegmentTintColor = .mushroomOrange // 선택 시 색상
         setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected) // 선택 시 글자 색상
-        backgroundColor = UIColor(red: 0.99, green: 0.96, blue: 0.92, alpha: 1.00) // 배경 색상 설정 - #fcf5eb
+        backgroundColor = .apricot // 배경 색상 설정 - #fcf5eb
         
         setAction()
     }

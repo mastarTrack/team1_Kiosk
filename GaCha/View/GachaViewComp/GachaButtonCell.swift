@@ -30,6 +30,9 @@ extension GachaButtonCell {
         label.textColor = .white
         label.textAlignment = .center
         
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        
         label.backgroundColor = .mushroomOrange
         label.layer.cornerRadius = 10
         label.clipsToBounds = true

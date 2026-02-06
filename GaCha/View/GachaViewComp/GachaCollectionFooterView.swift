@@ -7,7 +7,7 @@
 import UIKit
 import SnapKit
 
-class LegendaryItemFooterView: UICollectionReusableView {
+class GachaCollectionFooterView: UICollectionReusableView {
     let pageControl = UIPageControl()
     
     override init(frame: CGRect) {
