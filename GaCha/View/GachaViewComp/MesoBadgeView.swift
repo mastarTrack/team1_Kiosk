@@ -57,6 +57,6 @@ extension MesoBadgeView {
 
 extension MesoBadgeView {
     func config(_ item: Int) {
-        label.text = item == 0 ? "100" : "500"
+        label.text = item == 0 ? "1000" : "5000"
     }
 }

@@ -200,14 +200,27 @@ extension ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.section == 1 else { return }
         
+        let gachaPrice = 1000
+        
         if indexPath.item == 0 {
-            gacha()
+            if DataManager.shared.subtractMeso(amount: gachaPrice) {
+                gacha()
+            } else {
+                showErrorAlert(message: "메소가 부족합니다.")
+                return
+            }
         } else {
-            for _ in 0..<5 { gacha() }
+            if DataManager.shared.subtractMeso(amount: gachaPrice * 5) {
+                for _ in 0..<5 { gacha() }
+            } else {
+                showErrorAlert(message: "메소가 부족합니다.")
+                return
+            }
         }
         
         dataSource[2] = .third(gachaResult.reversed()) // 데이터소스 갱신
         mainView.gachaCollectionView.reloadData() // 컬렉션뷰 갱신
+        mainView.mesoStack.updateMeso()
     }
 }
 
