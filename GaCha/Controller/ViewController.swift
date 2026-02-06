@@ -115,7 +115,7 @@ extension ViewController: UICollectionViewDataSource {
         switch dataSource[section] {
         case .first(let items): return items.count // 0번째 섹션 - Legendary Item List 섹션
         case .second(let title): return title.count // 1번째 섹션 - Gacha Button 섹션
-        case .third(let items): return items.count
+        case .third(let items): return items.count // 2번째 섹션 - Result Table 섹션
         }
     }
     
@@ -129,23 +129,26 @@ extension ViewController: UICollectionViewDataSource {
         case "HeaderKind":
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! LegendaryItemHeaderView
             
-            if indexPath.section == 0 {
+            if indexPath.section == 0 { // Legendary Item List 섹션
                 headerView.configLegendaryItemSection()
-            } else if indexPath.section == 2 {
+            } else if indexPath.section == 2 { // Result Table 섹션
                 headerView.configResultTableSection()
             }
             
             return headerView
+            
         case "FooterKind":
             let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath) as! LegendaryItemFooterView
             
-            mainView.gachaCollectionView.pageControl = footerView.pageControl
+            mainView.gachaCollectionView.pageControl = footerView.pageControl // 컬렉션뷰에서 footerView의 페이지컨트롤 참조
             
+            // 전체 페이지 수 설정
             footerView.pageControl.numberOfPages = switch dataSource[indexPath.section] {
             case .first(let items):
                 items.count / 4
             default: 0
             }
+            
             return footerView
             
         default: return UICollectionReusableView()
@@ -162,6 +165,7 @@ extension ViewController: UICollectionViewDataSource {
             default: break
             }
             return cell
+            
         case 1:
             let cell = mainView.gachaCollectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.gachaButtonCell.rawValue, for: indexPath) as! GachaButtonCell
             switch dataSource[indexPath.section] {
@@ -170,6 +174,7 @@ extension ViewController: UICollectionViewDataSource {
             default: break
             }
             return cell
+            
         case 2:
             let cell = mainView.gachaCollectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.gachaResultCell.rawValue, for: indexPath) as! GachaResultCell
             switch dataSource[indexPath.section] {
@@ -190,12 +195,22 @@ extension ViewController: UICollectionViewDelegate {
         if indexPath.section == 1 && indexPath.item == 0 {
             guard let result = itemList.randomElement() else { return }
             print("1번 뽑기")
-//            gachaResult.count == 5 ? gachaResult.removeLast() : ()
-//            gachaResult.append(result)
+            if gachaResult.count == 5 { gachaResult.removeFirst() }
+            gachaResult.append(result)
+            print(gachaResult)
+            
+            dataSource[2] = .third(gachaResult.reversed())
+            mainView.gachaCollectionView.reloadData()
         } else if indexPath.section == 1 && indexPath.item == 1 {
             print("5번 뽑기")
-//            guard let result = itemList.randomElement() else { return }
-//            gachaResult.append(result)
+            var tempResult:[Item] = []
+            for _ in 0..<5 {
+                guard let result = itemList.randomElement() else { return }
+                tempResult.append(result)
+            }
+            gachaResult = tempResult
+            dataSource[2] = .third(gachaResult.reversed())
+            mainView.gachaCollectionView.reloadData()
         } else {
             print("다른 셀 선택")
         }

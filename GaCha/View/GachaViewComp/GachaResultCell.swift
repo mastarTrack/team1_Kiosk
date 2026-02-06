@@ -29,6 +29,7 @@ extension GachaResultCell {
     private func setAttributes() {
         imageView.contentMode = .scaleAspectFit
         
+        nameLabel.text = "뽑기 결과가 없습니다."
         nameLabel.font = .systemFont(ofSize: 16, weight: .semibold)
         nameLabel.textColor = .black
         

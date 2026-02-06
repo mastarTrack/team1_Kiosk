@@ -149,13 +149,13 @@ extension GachaCollectionView {
         let itemSize = (containerSize.width) / 4 // 섹션 0과 동일한 아이템 너비
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
             widthDimension: .absolute(itemSize),
-            heightDimension: .absolute(itemSize * 0.3)
+            heightDimension: .absolute(itemSize * 0.4)
         ))
         
         // group 설정
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(itemSize * 0.5)
+            heightDimension: .absolute(itemSize * 0.4)
         ), repeatingSubitem: item, count: 2)
         
         group.interItemSpacing = .fixed(itemSize)
