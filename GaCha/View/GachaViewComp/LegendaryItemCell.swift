@@ -46,7 +46,9 @@ extension LegendaryItemCell {
         
         nameLabel.font = .systemFont(ofSize: 16, weight: .semibold)
         nameLabel.textColor = .black
-        nameLabel.numberOfLines = 0
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.minimumScaleFactor = 0.5
+        nameLabel.textAlignment = .center
     }
 }
 
