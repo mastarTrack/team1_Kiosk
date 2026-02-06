@@ -67,7 +67,7 @@ extension InventoryView {
         inventoryTableView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.bottom.equalTo(safeAreaLayoutGuide)
+            $0.bottom.equalToSuperview()
         }
     }
 }
