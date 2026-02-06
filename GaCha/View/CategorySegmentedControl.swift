@@ -42,6 +42,7 @@ extension CategorySegmentedControl {
         GachaCategory.allCases.enumerated().forEach { (index, category) in
             self.insertSegment(withTitle: category.rawValue, at: index, animated: true)
         }
+        
     }
 }
 
