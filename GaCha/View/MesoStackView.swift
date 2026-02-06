@@ -22,7 +22,6 @@ class MesoStackView: UIStackView {
         title.textAlignment = .right // 텍스트 오른쪽정렬
         
         setAttributes()
-        //TODO: 메소(NSNumber 타입) overflow 방지 - 보유 메소 표시 제한 필요
         setCurrentMesoLabel(meso: 999999)
         
         addArrangedSubview(title)
