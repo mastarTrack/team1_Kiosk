@@ -8,7 +8,13 @@
 import UIKit
 import SnapKit
 
+protocol InventoryItemCellDelegate: AnyObject {
+    func didTapSellButton(with cell: InventoryItemCell) // 어느 셀에 해당하는 지 알아야해서 셀 자체를 넘겨줌
+}
+
 class InventoryItemCell: UITableViewCell {
+    
+    weak var delegate: InventoryItemCellDelegate?
     
     let itemImageView = UIImageView()
     let itemNameLabel = UILabel()
@@ -23,6 +29,8 @@ class InventoryItemCell: UITableViewCell {
         
         setAttributes()
         setLayout()
+        
+        setAction()
         
     }
     required init?(coder: NSCoder) {
@@ -93,5 +101,16 @@ extension InventoryItemCell {
         itemNameLabel.text = purchaseItem.item.name
         itemCountLabel.text = "\(purchaseItem.count)"
         itemPriceLabel.text = "\(purchaseItem.item.price)메소"
+    }
+}
+
+extension InventoryItemCell {
+    private func setAction() {
+        sellButton.addTarget(self, action: #selector(sellButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc
+    private func sellButtonTapped() {
+        delegate?.didTapSellButton(with: self)
     }
 }
