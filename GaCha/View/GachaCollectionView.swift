@@ -26,7 +26,7 @@ extension GachaCollectionView {
     private func setAttribute() {
         self.collectionViewLayout = makeCompositionalLayout()
         directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
-//        isScrollEnabled = false
+        isScrollEnabled = false
     }
 }
 
@@ -192,7 +192,7 @@ extension GachaCollectionView {
     private func setResultSection(_ environment: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let configuration = UICollectionLayoutListConfiguration(appearance: .plain)
         let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: environment)
-//        configuration.headerTopPadding = 0
+
         return section
     }
 }

@@ -45,14 +45,14 @@ struct ItemData {
         
         items += createItems(names: bottomsLeg, category: "하의", grade: "레전더리", imgPrefix: "legendary_bottom", startID: &currentID)
         items += createItems(names: bottomsNor, category: "하의", grade: "일반", imgPrefix: "bottom", startID: &currentID)
-
+        
         // --- 4. 모자 (hat) ---
         let hatsLeg = ["혼돈의 명령", "로열티 크라운", "폭신 레이스 귀마개", "폭신 눈사람 귀마개"]
         let hatsNor = ["핑크빈 스쿠터 헬멧", "브로콜리 모자", "포롱 동글모자", "민트초코 아이스크림 모자", "네온 다이아 머리띠", "달콤 버섯갓", "겨울여우 머리띠", "말랑 주황버섯 귀마개", "하늘 모래 신캡", "헤네시스 고깔", "튀김의 정령", "쑥쑥 새싹 모자", "내츄럴 도로시 탈", "영광의 얼굴", "대왕 붕어빵", "메신쥐 모자"]
         
         items += createItems(names: hatsLeg, category: "모자", grade: "레전더리", imgPrefix: "legendary_hat", startID: &currentID)
         items += createItems(names: hatsNor, category: "모자", grade: "일반", imgPrefix: "hat", startID: &currentID)
-
+        
         // --- 5. 신발 (shoes) ---
         let shoesLeg = ["별빛 걸음", "파멸의 궤적", "해답의 조각", "아너 마제스티"]
         let shoesNor = ["뽀송 다람", "해바라기 꽃신", "햇살 여우 넝굴", "구름 깃털", "나비선", "토끼곰 슬리퍼", "훌라훌라 구슬발찌", "카카오베어 슈즈", "꽃게도 갈게", "팡팡 범퍼카 슈즈", "서커스 방울 신발", "매화나무 나막신", "슬라임 슬리퍼", "하이틴 롤러스케이트", "정열적인 당화"]

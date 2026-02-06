@@ -8,24 +8,5 @@
 import Foundation
 
 class Meso {
-    
-    static let shared = Meso()
-    private var meso: Int = 10000
-    
-    func getCurrentMeso() -> Int {
-        return meso
-    }
-    
-    func addMeso(amount: Int) {
-        meso += amount
-    }
-    
-    func subtractMeso(amount: Int) -> Bool{
-        if meso >= amount{
-            meso -= amount
-            return true
-        } else {
-            return false
-        }
-    }
+    var meso: Int = 1000000
 }

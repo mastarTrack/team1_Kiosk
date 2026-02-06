@@ -39,7 +39,7 @@ class MesoStackView: UIStackView {
 // Meso 모델로부터 현재의 메소를 불러옴.
 extension MesoStackView {
     func updateMeso() {
-        let currentMeso = Meso.shared.getCurrentMeso()
+        let currentMeso = DataManager.shared.getCurrentMeso()
         
         let formatter = FormatterManager()
         currentMesoLabel.text = formatter.setMesoToString(meso: currentMeso)

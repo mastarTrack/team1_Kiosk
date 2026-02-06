@@ -6,14 +6,12 @@
 //
 
 import UIKit
+import IdentifiedCollections
 
 class InventoryViewController: UIViewController {
     
     weak var delegate: InventoryViewControllerDelegate?
-    
     private let inventoryView = InventoryView()
-    
-    var inventoryItemList: [PurchaseItem] = [] // 구매한 아이템을 받아 놓을 배열
     
     override func loadView() {
         self.view = inventoryView
@@ -43,12 +41,12 @@ extension InventoryViewController {
 
 extension InventoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return inventoryItemList.count
+        return DataManager.shared.inventoryList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! InventoryItemCell
-        let purchaseItem = inventoryItemList[indexPath.row]
+        let purchaseItem = DataManager.shared.inventoryList[indexPath.row]
         cell.config(with: purchaseItem)
         
         cell.delegate = self // InventoryItemCell의 Delegate 선언
@@ -82,23 +80,22 @@ extension InventoryViewController: InventoryViewDelegate {
     func sellAllItem() {
         
         // 받게되는 전체 메소
-        let totalMeso = inventoryItemList.reduce(0) { sum, purchaseItem in
+        let totalMeso = DataManager.shared.inventoryList.reduce(0) { sum, purchaseItem in
             let price = Double(purchaseItem.item.price * purchaseItem.count)
             return sum + Int(price * 0.4)
         }
-        Meso.shared.addMeso(amount: totalMeso)
+        DataManager.shared.addMeso(amount: totalMeso)
         
-        self.inventoryItemList.removeAll()
+        DataManager.shared.inventoryList.removeAll()
         self.inventoryView.inventoryTableView.reloadData()
         
-        delegate?.didUpdateInventoryItemList(with: inventoryItemList)
     }
 }
 
 extension InventoryViewController: InventoryItemCellDelegate {
     func didTapSellButton(with cell: InventoryItemCell) {
         guard let indexPath = inventoryView.inventoryTableView.indexPath(for: cell) else { return }
-        let selectedItem = inventoryItemList[indexPath.row]
+        let selectedItem = DataManager.shared.inventoryList[indexPath.row]
         
         let alert = UIAlertController(title: "판매하기", message: "\(selectedItem.item.name) 판매 개수를 입력해주세요.", preferredStyle: .alert)
         
@@ -123,27 +120,25 @@ extension InventoryViewController: InventoryItemCellDelegate {
         present(alert, animated: true)
     }
     
-    //TODO: 입력이 음수거나 보유 개수보다 클 경우 예외처리 필요(showErrorAlert로 처리 완료)
     func sellItem(indexPath: IndexPath, count: Int) {
         let itemIndex = indexPath.row
-        let selectedItem = inventoryItemList[itemIndex]
-        let currentItemCount = inventoryItemList[itemIndex].count
+        let selectedItem = DataManager.shared.inventoryList[itemIndex]
+        let currentItemCount = DataManager.shared.inventoryList[itemIndex].count
         
         if count <= 0 || currentItemCount < count { // 입력된 값이 0보다 작거나 현재 개수보다 많을 경우
             showErrorAlert(message: "판매 개수를 다시 확인해주세요.")
             return
         }
         if count == currentItemCount { // 개수가 같을 경우 아이템 리스트에서 제거, 테이블 뷰에서 제거
-            inventoryItemList.remove(at: itemIndex)
+            DataManager.shared.inventoryList.remove(at: itemIndex)
             inventoryView.inventoryTableView.deleteRows(at: [indexPath], with: .automatic)
         } else { // 개수가 적을 경우( 리스트에서 개수 감소, 해당 row만 reload)
-            inventoryItemList[itemIndex].count -= count
+            DataManager.shared.inventoryList[itemIndex].count -= count
             inventoryView.inventoryTableView.reloadRows(at: [indexPath], with: .automatic)
         }
         let originalEranedMeso = Double(selectedItem.item.price * count)
         let earnedMeso = Int(originalEranedMeso * 0.4)
-        Meso.shared.addMeso(amount: earnedMeso)
-        delegate?.didUpdateInventoryItemList(with: inventoryItemList)
+        DataManager.shared.addMeso(amount: earnedMeso)
     }
 }
 

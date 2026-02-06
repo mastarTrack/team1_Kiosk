@@ -15,7 +15,7 @@ class GachaCollectionFooterView: UICollectionReusableView {
         pageControl.currentPage = 1
         
         pageControl.currentPageIndicatorTintColor = .mushroomOrange
-        pageControl.pageIndicatorTintColor = UIColor(red: 0.99, green: 0.96, blue: 0.92, alpha: 1.00)
+        pageControl.pageIndicatorTintColor = .apricot
         pageControl.isUserInteractionEnabled = false // pageIndicator 눌러서 indicator 위치 변경을 막음
         
         addSubview(pageControl)

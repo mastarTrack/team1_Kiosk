@@ -7,7 +7,10 @@
 
 import Foundation
 
-struct PurchaseItem {
+struct PurchaseItem: Identifiable {
+    var id: Int{
+        item.id
+    }
     let item: Item
     var count: Int
     var totalPrice: Int {
