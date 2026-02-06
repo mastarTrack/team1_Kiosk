@@ -17,8 +17,7 @@ class ViewController: UIViewController {
     private var purchaseItemList: [Int: PurchaseItem] = [:] // 구매한 아이템 담아둘 딕셔너리( item.id : Item)
     private var dataSource: [Section] = []
     private var gachaResult: [Item] = []
-    private var inventoryItemList: [Int: PurchaseItem] = [:] // 구매한 아이템 담아둘 딕셔너리( item.id : Item)
-    
+
     override func loadView() {
         self.view = mainView
     }
@@ -196,15 +195,15 @@ extension ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 1 && indexPath.item == 0 {
             guard let result = itemList.randomElement() else { return }
-            print("1번 뽑기")
+//            print("1번 뽑기")
             if gachaResult.count == 5 { gachaResult.removeFirst() }
             gachaResult.append(result)
-            print(gachaResult)
+//            print(gachaResult)
             
             dataSource[2] = .third(gachaResult.reversed())
             mainView.gachaCollectionView.reloadData()
         } else if indexPath.section == 1 && indexPath.item == 1 {
-            print("5번 뽑기")
+//            print("5번 뽑기")
             var tempResult:[Item] = []
             for _ in 0..<5 {
                 guard let result = itemList.randomElement() else { return }
@@ -213,15 +212,13 @@ extension ViewController: UICollectionViewDelegate {
             gachaResult = tempResult
             dataSource[2] = .third(gachaResult.reversed())
             mainView.gachaCollectionView.reloadData()
-        } else {
-            print("다른 셀 선택")
         }
     }
 }
 extension ViewController: MainViewDelegate {
     func didTapPurchaseButton() {
         guard let selectedPaths = mainView.itemTableView.indexPathsForSelectedRows else {
-            print("선택된 아이템이 없습니다.")
+            print("선택된 아이템이 없습니다.") //TODO: 선택된 아이템없을 시 버튼 비활성화
             return
         }
         
@@ -237,13 +234,13 @@ extension ViewController: MainViewDelegate {
             //            print("\(selectedItem.name) 구매")
         }
         selectedPaths.forEach { mainView.itemTableView.deselectRow(at: $0, animated: true) } // 구매버튼 클릭 후 선택 풀기
-        print("구매 현황")
-        purchaseItemList.values.forEach { print("\($0.item.name): \($0.count)개")}
+//        print("구매 현황")
+//        purchaseItemList.values.forEach { print("\($0.item.name): \($0.count)개")}
         
     }
     
     func didTapInventoryButton() {
-        print("인벤토리 버튼 선택")
+//        print("인벤토리 버튼 선택")
         let inventoryViewController = InventoryViewController()
         
         inventoryViewController.inventoryItemList = Array(purchaseItemList.values) // 구매한 딕셔너리에서 values만 뽑아서 줌
