@@ -9,7 +9,7 @@ import UIKit
 
 //TODO: removeAll만 구현되어있음. 개별 판매하고나서 업데이트하는 로직 필요
 protocol InventoryViewControllerDelegate: AnyObject {
-    func didUpdateInventoryItemList()
+    func didUpdateInventoryItemList(with updatedItemList: [PurchaseItem])
 }
 
 class InventoryViewController: UIViewController {
@@ -88,7 +88,7 @@ extension InventoryViewController: InventoryViewDelegate {
         self.inventoryItemList.removeAll()
         self.inventoryView.inventoryTableView.reloadData()
         
-        delegate?.didUpdateInventoryItemList()
+        delegate?.didUpdateInventoryItemList(with: inventoryItemList)
     }
 }
 
@@ -136,6 +136,7 @@ extension InventoryViewController: InventoryItemCellDelegate {
             inventoryItemList[itemIndex].count -= count
             inventoryView.inventoryTableView.reloadRows(at: [indexPath], with: .automatic)
         }
+        delegate?.didUpdateInventoryItemList(with: inventoryItemList)
     }
 }
 

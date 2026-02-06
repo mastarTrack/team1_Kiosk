@@ -62,6 +62,6 @@ extension ItemCell {
     func config(with item: Item) {
         itemImageView.image = UIImage(named: item.imageName)
         itemNameLabel.text = item.name
-        itemPriceLabel.text = "\(item.price)메소"
+        itemPriceLabel.text = "\(item.price) 메소"
     }
 }

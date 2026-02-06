@@ -100,7 +100,7 @@ extension InventoryItemCell {
         itemImageView.image = UIImage(named: purchaseItem.item.imageName)
         itemNameLabel.text = purchaseItem.item.name
         itemCountLabel.text = "\(purchaseItem.count)"
-        itemPriceLabel.text = "\(purchaseItem.item.price)메소"
+        itemPriceLabel.text = "\(purchaseItem.item.price) 메소"
     }
 }
 

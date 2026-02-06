@@ -250,7 +250,10 @@ extension ViewController: MainViewDelegate {
 }
 
 extension ViewController: InventoryViewControllerDelegate {
-    func didUpdateInventoryItemList() {
+    func didUpdateInventoryItemList(with updatedItemList: [PurchaseItem]) {
         self.purchaseItemList.removeAll()
+        updatedItemList.forEach { purchaseItem in
+            self.purchaseItemList[purchaseItem.item.id] = purchaseItem
+        }
     }
 }
