@@ -193,25 +193,30 @@ extension ViewController: UICollectionViewDataSource {
 
 extension ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let items = ItemData.allItems
+        
         if indexPath.section == 1 && indexPath.item == 0 {
-            guard let result = itemList.randomElement() else { return }
-//            print("1번 뽑기")
-            if gachaResult.count == 5 { gachaResult.removeFirst() }
-            gachaResult.append(result)
-//            print(gachaResult)
+            // 1번 뽑기
+            guard let result = items.randomElement() else { return } // 랜덤 아이템
+
+            if gachaResult.count == 5 { gachaResult.removeFirst() } // 뽑기 결과가 5개 존재한다면 마지막 결과를 삭제
+            gachaResult.append(result) // 신규 결과 추가
+            purchaseItemList[result.id, default: PurchaseItem(item: result, count: 0)].count += 1 // 구매 목록 count += 1
             
-            dataSource[2] = .third(gachaResult.reversed())
-            mainView.gachaCollectionView.reloadData()
+            dataSource[2] = .third(gachaResult.reversed()) // 데이터소스 갱신
+            mainView.gachaCollectionView.reloadData() // 컬렉션뷰 갱신
         } else if indexPath.section == 1 && indexPath.item == 1 {
-//            print("5번 뽑기")
+            // 5번 뽑기
             var tempResult:[Item] = []
             for _ in 0..<5 {
-                guard let result = itemList.randomElement() else { return }
-                tempResult.append(result)
+                guard let result = items.randomElement() else { return } // 랜덤 아이템
+                tempResult.append(result) // 임시 배열에 저장
+                purchaseItemList[result.id, default: PurchaseItem(item: result, count: 0)].count += 1 // 구매 목록 count += 1
             }
-            gachaResult = tempResult
-            dataSource[2] = .third(gachaResult.reversed())
-            mainView.gachaCollectionView.reloadData()
+            gachaResult = tempResult // 결과 배열에 임시배열 대입
+            
+            dataSource[2] = .third(gachaResult.reversed()) // 데이터소스 갱신
+            mainView.gachaCollectionView.reloadData() // 컬렉션뷰 갱신
         }
     }
 }
