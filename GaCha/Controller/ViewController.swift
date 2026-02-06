@@ -13,12 +13,10 @@ class ViewController: UIViewController {
     private let mainView = MainView()
     private var selectedCategory: String = GachaCategory.gacha.rawValue // 선택된 카테고리 기본값
     
-//    private let allItemList: [Item] = ItemData.allItems
     private var itemList: [Item] = []
-//    private var purchaseItemList: [Int: PurchaseItem] = [:] // 구매한 아이템 담아둘 딕셔너리( item.id : Item)
     private var dataSource: [Section] = []
     private var gachaResult: [Item] = []
-
+    
     override func loadView() {
         self.view = mainView
     }
@@ -50,7 +48,6 @@ extension ViewController {
 extension ViewController: CategorySegmentedControlDelegate {
     func categorySegmentedControlChanged(_ selected: String?) {
         selectedCategory = selected ?? GachaCategory.gacha.rawValue // 선택된 카테고리 변경
-//        print(selectedCategory)
         
         updateItemList()
         mainView.itemTableView.reloadData()
@@ -135,7 +132,7 @@ extension ViewController: UICollectionViewDataSource {
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! GachaCollectionHeaderView
             
             headerView.config(indexPath.section)
- 
+            
             return headerView
             
         case "FooterKind":
@@ -244,8 +241,6 @@ extension ViewController: MainViewDelegate {
                 //            print("\(selectedItem.name) 구매")
             }
             selectedPaths.forEach { mainView.itemTableView.deselectRow(at: $0, animated: true) } // 구매버튼 클릭 후 선택 풀기
-            //        print("구매 현황")
-            //        purchaseItemList.values.forEach { print("\($0.item.name): \($0.count)개")}
             mainView.mesoStack.updateMeso()
         } else {
             showErrorAlert(message: "보유 메소가 부족합니다.")
@@ -253,24 +248,10 @@ extension ViewController: MainViewDelegate {
     }
     
     func didTapInventoryButton() {
-//        print("인벤토리 버튼 선택")
         let inventoryViewController = InventoryViewController()
-        
-//        inventoryViewController.inventoryItemList = Array(DataManager.shared.inventoryList.values) // 구매한 딕셔너리에서 values만 뽑아서 줌
-//        inventoryViewController.delegate = self
         self.present(inventoryViewController, animated: true)
     }
 }
-
-//extension ViewController: InventoryViewControllerDelegate {
-//    func didUpdateInventoryItemList(with updatedItemList: [PurchaseItem]) {
-//        self.purchaseItemList.removeAll()
-//        updatedItemList.forEach { purchaseItem in
-//            self.purchaseItemList[purchaseItem.item.id] = purchaseItem
-//        }
-//        mainView.mesoStack.updateMeso()
-//    }
-//}
 
 // 에러처리 Alert
 extension ViewController {
@@ -294,7 +275,6 @@ extension ViewController {
         
         guard let result else { return }
         gachaResult.append(result)
-//        purchaseItemList[result.id, default: PurchaseItem(item: result, count: 0)].count += 1
         DataManager.shared.addItemToInventory(item: result)
     }
 }

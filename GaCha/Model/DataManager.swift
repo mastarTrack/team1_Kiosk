@@ -13,9 +13,6 @@ class DataManager {
     static let shared = DataManager()
     
     var inventoryList: IdentifiedArrayOf<PurchaseItem> = []
-    
-    var didChangeMeso: (() -> Void)?
-    
     func addItemToInventory(item: Item) {
         if var item = DataManager.shared.inventoryList[id: item.id] {
             item.count += 1
@@ -26,6 +23,9 @@ class DataManager {
     }
     
     var meso = Meso()
+    
+    var didChangeMeso: (() -> Void)?
+    
     func getCurrentMeso() -> Int {
         return meso.meso
     }

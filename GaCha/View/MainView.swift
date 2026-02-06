@@ -29,7 +29,7 @@ class MainView: UIView {
         itemTableView.showsVerticalScrollIndicator = false
         
         let titleLabel = makeTitleLabel()
-
+        
         addSubview(titleLabel)
         addSubview(inventoryButton)
         addSubview(mesoStack)

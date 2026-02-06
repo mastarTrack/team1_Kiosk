@@ -11,19 +11,6 @@ enum CellIdentifier: String {
     case gachaResultCell = "GachaResultCell"
 }
 
-//enum SupplementaryKind {
-//    enum ReuseIdentifier: String, CaseIterable {
-//        case headerKind = "Header"
-//    }
-//    
-//    case header(reuse: ReuseIdentifier)
-//    
-//    static func getKind() -> String {
-//        switch self {
-//        case header(reuse: .allCases): return "HeaderKind"
-//    }
-//}
-
 enum Section {
     case first([Item])
     case second([String])

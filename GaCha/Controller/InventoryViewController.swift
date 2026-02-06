@@ -11,10 +11,7 @@ import IdentifiedCollections
 class InventoryViewController: UIViewController {
     
     weak var delegate: InventoryViewControllerDelegate?
-    
     private let inventoryView = InventoryView()
-    
-//    var inventoryItemList: [PurchaseItem] = [] // 구매한 아이템을 받아 놓을 배열
     
     override func loadView() {
         self.view = inventoryView
@@ -92,7 +89,6 @@ extension InventoryViewController: InventoryViewDelegate {
         DataManager.shared.inventoryList.removeAll()
         self.inventoryView.inventoryTableView.reloadData()
         
-//        delegate?.didUpdateInventoryItemList(with: inventoryItemList)
     }
 }
 
@@ -124,7 +120,6 @@ extension InventoryViewController: InventoryItemCellDelegate {
         present(alert, animated: true)
     }
     
-    //TODO: 입력이 음수거나 보유 개수보다 클 경우 예외처리 필요(showErrorAlert로 처리 완료)
     func sellItem(indexPath: IndexPath, count: Int) {
         let itemIndex = indexPath.row
         let selectedItem = DataManager.shared.inventoryList[itemIndex]
@@ -144,8 +139,6 @@ extension InventoryViewController: InventoryItemCellDelegate {
         let originalEranedMeso = Double(selectedItem.item.price * count)
         let earnedMeso = Int(originalEranedMeso * 0.4)
         DataManager.shared.addMeso(amount: earnedMeso)
-//        delegate?.didUpdateInventoryItemList(with: inventoryItemList)
-        
     }
 }
 

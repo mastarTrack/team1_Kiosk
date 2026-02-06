@@ -8,5 +8,5 @@
 import Foundation
 
 class Meso {
-    var meso: Int = 10000
+    var meso: Int = 1000000
 }
