@@ -8,10 +8,6 @@
 import SnapKit
 import UIKit
 
-protocol InventoryViewDelegate: AnyObject {
-    func didTapSellAllButton()
-}
-
 class InventoryView: UIView {
     
     weak var delegate: InventoryViewDelegate?

@@ -214,21 +214,25 @@ extension ViewController: MainViewDelegate {
             return
         }
         
-        for indexPath in selectedPaths {
-            let selectedItem = itemList[indexPath.row] // selectedPaths 배열에서 하나하나 뽑아온 데이터 selectedItem
-            
-            if var existingPurchase = purchaseItemList[selectedItem.id] { // inventoryItemList에 있다면
-                existingPurchase.count += 1 // [1: [Item, count: 1]]
-                purchaseItemList[selectedItem.id] = existingPurchase
-            } else { // inventoryItemList에 없을 경우
-                purchaseItemList[selectedItem.id] = PurchaseItem(item: selectedItem, count: 1)
-            }
-            //            print("\(selectedItem.name) 구매")
+        // 총 비용 확인용 totalAmount 생성
+        let totalAmount = selectedPaths.reduce(0) { sum, indexPath in
+            sum + itemList[indexPath.row].price
         }
-        selectedPaths.forEach { mainView.itemTableView.deselectRow(at: $0, animated: true) } // 구매버튼 클릭 후 선택 풀기
-//        print("구매 현황")
-//        purchaseItemList.values.forEach { print("\($0.item.name): \($0.count)개")}
         
+        // 현재 메소와 비교하여 totalAmount보다 클 경우 구매
+        if Meso.shared.subtractMeso(amount: totalAmount) {
+            for indexPath in selectedPaths {
+                let selectedItem = itemList[indexPath.row] // selectedPaths 배열에서 하나하나 뽑아온 데이터 selectedItem
+                purchaseItemList[selectedItem.id, default: PurchaseItem(item: selectedItem, count: 0)].count += 1 // default로 변경
+                //            print("\(selectedItem.name) 구매")
+            }
+            selectedPaths.forEach { mainView.itemTableView.deselectRow(at: $0, animated: true) } // 구매버튼 클릭 후 선택 풀기
+            //        print("구매 현황")
+            //        purchaseItemList.values.forEach { print("\($0.item.name): \($0.count)개")}
+            mainView.mesoStack.updateMeso()
+        } else {
+            showErrorAlert(message: "보유 메소가 부족합니다.")
+        }
     }
     
     func didTapInventoryButton() {
@@ -242,8 +246,21 @@ extension ViewController: MainViewDelegate {
 }
 
 extension ViewController: InventoryViewControllerDelegate {
-    func didUpdateInventoryItemList() {
+    func didUpdateInventoryItemList(with updatedItemList: [PurchaseItem]) {
         self.purchaseItemList.removeAll()
+        updatedItemList.forEach { purchaseItem in
+            self.purchaseItemList[purchaseItem.item.id] = purchaseItem
+        }
+        mainView.mesoStack.updateMeso()
+    }
+}
+
+// 에러처리 Alert
+extension ViewController {
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        present(alert, animated: true)
     }
 }
 

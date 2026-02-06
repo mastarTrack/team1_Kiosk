@@ -70,7 +70,7 @@ struct ItemData {
                 name: name,
                 category: category,
                 grade: grade,
-                price: 0, // 요청하신 대로 전부 0원 적용
+                price: 1000, // 요청하신 대로 전부 0원 적용
                 imageName: "\(imgPrefix)\(index + 1)" // 예: hat1, legendary_hat1
             )
             startID += 1

@@ -10,6 +10,8 @@ import SnapKit
 
 class InventoryItemCell: UITableViewCell {
     
+    weak var delegate: InventoryItemCellDelegate?
+    
     let itemImageView = UIImageView()
     let itemNameLabel = UILabel()
     let itemCountLabel = UILabel()
@@ -23,6 +25,8 @@ class InventoryItemCell: UITableViewCell {
         
         setAttributes()
         setLayout()
+        
+        setAction()
         
     }
     required init?(coder: NSCoder) {
@@ -94,6 +98,19 @@ extension InventoryItemCell {
         itemImageView.image = UIImage(named: purchaseItem.item.imageName)
         itemNameLabel.text = purchaseItem.item.name
         itemCountLabel.text = "\(purchaseItem.count)"
-        itemPriceLabel.text = "\(purchaseItem.item.price)메소"
+        
+        let formatter = FormatterManager()
+        itemPriceLabel.text = formatter.setMesoToString(meso: purchaseItem.totalPrice)
+    }
+}
+
+extension InventoryItemCell {
+    private func setAction() {
+        sellButton.addTarget(self, action: #selector(sellButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc
+    private func sellButtonTapped() {
+        delegate?.didTapSellButton(with: self)
     }
 }
