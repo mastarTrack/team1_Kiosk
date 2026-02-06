@@ -78,8 +78,10 @@ extension GachaResultCell {
         
         if gradeLabel.text == "레전더리" {
             contentView.backgroundColor = .mushroomOrange
+            nameLabel.textColor = .white
         } else {
             contentView.backgroundColor = .apricot
+            nameLabel.textColor = .black
         }
     }
 }
