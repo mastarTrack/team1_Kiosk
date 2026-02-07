@@ -78,3 +78,6 @@ struct ItemData {
         }
     }
 }
+
+//MARK: DiffableDataSource 사용을 위한 Hashable 프로토콜 채택
+extension Item: Hashable { }

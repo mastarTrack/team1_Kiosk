@@ -196,3 +196,33 @@ extension GachaCollectionView {
         return section
     }
 }
+
+//MARK: Diffable DataSource
+// 섹션 타입 정의
+enum Section2 {
+    case legendaryItemList
+    case gachaButton
+    case resultTable
+}
+
+// 데이터 소스 타입 정의
+enum DataSource: Hashable {
+    case legendaryItemList(Item)
+    case gachaButton(String)
+    case resultTable(Item)
+//    
+//    func hash(into hasher: inout Hasher) {
+//        switch self {
+//            case .legendaryItemList(let item):
+//            hasher.combine(item)
+//        case .gachaButton(let title):
+//            hasher.combine(title)
+//        case .resultTable(let item):
+//            hasher.combine(item)
+//        }
+//    }
+}
+
+extension GachaCollectionView {
+   
+}

@@ -14,8 +14,10 @@ class ViewController: UIViewController {
     private var selectedCategory: String = GachaCategory.gacha.rawValue // 선택된 카테고리 기본값
     
     private var itemList: [Item] = []
-    private var dataSource: [Section] = []
+//    private var dataSource: [Section] = []
     private var gachaResult: [Item] = []
+    
+    lazy var dataSource = makeCollectionViewDiffableDataSource(mainView.gachaCollectionView)
     
     override func loadView() {
         self.view = mainView
@@ -27,7 +29,7 @@ class ViewController: UIViewController {
         setItemTableView()
         
         updateItemList()
-        setGachaCollectionViewDataSource()
+//        setGachaCollectionViewDataSource()
         DataManager.shared.didChangeMeso = { [weak self] in
             self?.mainView.mesoStack.updateMeso()
         }
@@ -39,7 +41,7 @@ extension ViewController {
     private func setDelegate() {
         mainView.categorySegment.delegate = self
         mainView.gachaCollectionView.delegate = self
-        mainView.gachaCollectionView.dataSource = self
+//        mainView.gachaCollectionView.dataSource = self
         mainView.delegate = self
     }
 }
@@ -75,13 +77,13 @@ extension ViewController {
         }
     }
     
-    private func setGachaCollectionViewDataSource() {
-        dataSource = [
-            .first(self.itemList),
-            .second(["1회 뽑기", "5회 뽑기"]),
-            .third([])
-        ]
-    }
+//    private func setGachaCollectionViewDataSource() {
+//        dataSource = [
+//            .first(self.itemList),
+//            .second(["1회 뽑기", "5회 뽑기"]),
+//            .third([])
+//        ]
+//    }
 }
 
 extension ViewController {
@@ -110,88 +112,92 @@ extension ViewController: UITableViewDelegate {
     
 }
 
+//MARK: GachaCollectionView
 // GachaView CollectionView datasource 정의
-extension ViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        switch dataSource[section] {
-        case .first(let items): return items.count // 0번째 섹션 - Legendary Item List 섹션
-        case .second(let title): return title.count // 1번째 섹션 - Gacha Button 섹션
-        case .third(let items): return items.count // 2번째 섹션 - Result Table 섹션
-        }
-    }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // 섹션의 개수
-        return dataSource.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case "HeaderKind":
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! GachaCollectionHeaderView
-            
-            headerView.config(indexPath.section)
-            
-            return headerView
-            
-        case "FooterKind":
-            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath) as! GachaCollectionFooterView
-            
-            mainView.gachaCollectionView.pageControl = footerView.pageControl // 컬렉션뷰에서 footerView의 페이지컨트롤 참조
-            
-            // 전체 페이지 수 설정
-            footerView.pageControl.numberOfPages = switch dataSource[indexPath.section] {
-            case .first(let items):
-                items.count / 4
-            default: 0
-            }
-            
-            return footerView
-            
-        case "BadgeKind":
-            let badgeView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Badge", for: indexPath) as! MesoBadgeView
-            if indexPath.section == 1 { badgeView.config(indexPath.item) }
-            return badgeView
-            
-        default: return UICollectionReusableView()
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = mainView.gachaCollectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.legendaryItemCell.rawValue, for: indexPath) as! LegendaryItemCell
-            switch dataSource[indexPath.section] {
-            case .first(let items):
-                cell.config(with: items[indexPath.item])
-            default: break
-            }
-            return cell
-            
-        case 1:
-            let cell = mainView.gachaCollectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.gachaButtonCell.rawValue, for: indexPath) as! GachaButtonCell
-            switch dataSource[indexPath.section] {
-            case .second(let titles):
-                cell.config(with: titles[indexPath.item])
-            default: break
-            }
-            return cell
-            
-        case 2:
-            let cell = mainView.gachaCollectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.gachaResultCell.rawValue, for: indexPath) as! GachaResultCell
-            switch dataSource[indexPath.section] {
-            case .third(let items):
-                cell.config(with: items[indexPath.item])
-            default: break
-            }
-            return cell
-            
-        default:
-            return UICollectionViewCell()
-        }
-    }
-}
+
+
+
+//extension ViewController: UICollectionViewDataSource {
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        
+//        switch dataSource[section] {
+//        case .first(let items): return items.count // 0번째 섹션 - Legendary Item List 섹션
+//        case .second(let title): return title.count // 1번째 섹션 - Gacha Button 섹션
+//        case .third(let items): return items.count // 2번째 섹션 - Result Table 섹션
+//        }
+//    }
+//    
+//    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        // 섹션의 개수
+//        return dataSource.count
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+//        switch kind {
+//        case "HeaderKind":
+//            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! GachaCollectionHeaderView
+//            
+//            headerView.config(indexPath.section)
+//            
+//            return headerView
+//            
+//        case "FooterKind":
+//            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath) as! GachaCollectionFooterView
+//            
+//            mainView.gachaCollectionView.pageControl = footerView.pageControl // 컬렉션뷰에서 footerView의 페이지컨트롤 참조
+//            
+//            // 전체 페이지 수 설정
+//            footerView.pageControl.numberOfPages = switch dataSource[indexPath.section] {
+//            case .first(let items):
+//                items.count / 4
+//            default: 0
+//            }
+//            
+//            return footerView
+//            
+//        case "BadgeKind":
+//            let badgeView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Badge", for: indexPath) as! MesoBadgeView
+//            if indexPath.section == 1 { badgeView.config(indexPath.item) }
+//            return badgeView
+//            
+//        default: return UICollectionReusableView()
+//        }
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        switch indexPath.section {
+//        case 0:
+//            let cell = mainView.gachaCollectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.legendaryItemCell.rawValue, for: indexPath) as! LegendaryItemCell
+//            switch dataSource[indexPath.section] {
+//            case .first(let items):
+//                cell.config(with: items[indexPath.item])
+//            default: break
+//            }
+//            return cell
+//            
+//        case 1:
+//            let cell = mainView.gachaCollectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.gachaButtonCell.rawValue, for: indexPath) as! GachaButtonCell
+//            switch dataSource[indexPath.section] {
+//            case .second(let titles):
+//                cell.config(with: titles[indexPath.item])
+//            default: break
+//            }
+//            return cell
+//            
+//        case 2:
+//            let cell = mainView.gachaCollectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.gachaResultCell.rawValue, for: indexPath) as! GachaResultCell
+//            switch dataSource[indexPath.section] {
+//            case .third(let items):
+//                cell.config(with: items[indexPath.item])
+//            default: break
+//            }
+//            return cell
+//            
+//        default:
+//            return UICollectionViewCell()
+//        }
+//    }
+//}
 
 extension ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -215,8 +221,8 @@ extension ViewController: UICollectionViewDelegate {
             }
         }
         
-        dataSource[2] = .third(gachaResult.reversed()) // 데이터소스 갱신
-        mainView.gachaCollectionView.reloadData() // 컬렉션뷰 갱신
+//        dataSource[2] = .third(gachaResult.reversed()) // 데이터소스 갱신
+//        mainView.gachaCollectionView.reloadData() // 컬렉션뷰 갱신
         mainView.mesoStack.updateMeso()
     }
 }
@@ -278,3 +284,92 @@ extension ViewController {
         DataManager.shared.addItemToInventory(item: result)
     }
 }
+
+extension ViewController {
+    private func makeCollectionViewDiffableDataSource(_ collectionView: UICollectionView) -> UICollectionViewDiffableDataSource<Section2, DataSource> {
+        // 레전더리 아이템 셀 등록
+        let legendaryCellRegistration = UICollectionView.CellRegistration<LegendaryItemCell, Item> { cell, indexPath, item in
+            cell.config(with: item)
+        }
+        
+        // 가챠 버튼 셀 등록
+        let gachaButtonCellRegistration = UICollectionView.CellRegistration<GachaButtonCell, String> { cell, indexPath, title in
+            cell.config(with: title)
+        }
+        
+        // 가챠 결과 셀 등록
+        let resultListCellRegistration = UICollectionView.CellRegistration<GachaResultCell, Item> { cell, indexPath, item in
+            var configuration = cell.defaultContentConfiguration()
+            cell.contentConfiguration = configuration
+            cell.config(with: item)
+        }
+        
+        // 헤더 뷰 등록
+        let headerRegistration = UICollectionView.SupplementaryRegistration<GachaCollectionHeaderView>(elementKind: "HeaderKind") { [weak self] supplementaryView, elementKind, indexPath in
+            guard let section = self?.dataSource.sectionIdentifier(for: indexPath.section) else {
+                fatalError("Cannot find section")
+            }
+            
+            supplementaryView.config(section)
+        }
+        
+        // 푸터 뷰 등록
+        let footerRegistration = UICollectionView.SupplementaryRegistration<GachaCollectionFooterView>(elementKind: "FooterKind") { supplementaryView, elementKind, indexPath in
+            
+        }
+        
+        // 뱃지 뷰 등록
+        let badgeRegistration = UICollectionView.SupplementaryRegistration<MesoBadgeView>(elementKind: "BadgeKind") { supplementaryView, elementKind, indexPath in
+            supplementaryView.config(indexPath.item)
+        }
+        
+        
+        // 데이터소스 설정
+        let dataSource = UICollectionViewDiffableDataSource<Section2, DataSource>(collectionView: mainView.gachaCollectionView) { [weak self] (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: DataSource) in
+            guard let section = self?.dataSource.sectionIdentifier(for: indexPath.section) else {
+                fatalError("Cannot find section")
+            }
+            
+            return switch section {
+            case .legendaryItemList:
+                switch itemIdentifier {
+                case .legendaryItemList(let item):
+                    collectionView.dequeueConfiguredReusableCell(using: legendaryCellRegistration, for: indexPath, item: item)
+                default: nil
+                }
+                
+            case .gachaButton:
+                switch itemIdentifier {
+                case .gachaButton(let title):
+                    collectionView.dequeueConfiguredReusableCell(using: gachaButtonCellRegistration, for: indexPath, item: title)
+                default: nil
+                }
+                
+            case .resultTable:
+                switch itemIdentifier {
+                case .resultTable(let item):
+                    collectionView.dequeueConfiguredReusableCell(using: resultListCellRegistration, for: indexPath, item: item)
+                default: nil
+                }
+            }
+        }
+        
+        // 헤더 뷰
+        dataSource.supplementaryViewProvider = { (collectionView: UICollectionView, elementKind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
+        }
+        
+        // 푸터 뷰
+        dataSource.supplementaryViewProvider = { (collectionView: UICollectionView, elementKind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+            return collectionView.dequeueConfiguredReusableSupplementary(using: footerRegistration, for: indexPath)
+        }
+        
+        // 뱃지 뷰
+        dataSource.supplementaryViewProvider = {
+            $0.dequeueConfiguredReusableSupplementary(using: badgeRegistration, for: $2)
+        }
+        
+        return dataSource
+    }
+}
+

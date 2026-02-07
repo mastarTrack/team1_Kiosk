@@ -41,4 +41,26 @@ extension GachaCollectionHeaderView {
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
     }
+    
+    func config(_ section: Section2) {
+        switch section {
+        case .legendaryItemList: // Legendary Item List 섹션
+            label.text = "아무도 갖지 못한 아이템을 뽑아라!"
+            label.font = .boldSystemFont(ofSize: 20)
+            label.textAlignment = .center
+            label.textColor = .black
+            
+        case .resultTable: // Result Table 섹션
+            label.text = "뽑기 결과"
+            label.font = .systemFont(ofSize: 15, weight: .bold)
+            label.textColor = .mushroomOrange
+            label.textAlignment = .left
+            
+        default:
+            break
+        }
+        
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+    }
 }
