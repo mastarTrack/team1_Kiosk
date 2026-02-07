@@ -29,7 +29,10 @@ class ViewController: UIViewController {
         setItemTableView()
         
         updateItemList()
+        
 //        setGachaCollectionViewDataSource()
+        setSnapshot()
+        
         DataManager.shared.didChangeMeso = { [weak self] in
             self?.mainView.mesoStack.updateMeso()
         }
@@ -285,7 +288,9 @@ extension ViewController {
     }
 }
 
+//MARK: GachaCollectionView DiffableDataSource
 extension ViewController {
+    // 데이터소스 생성
     private func makeCollectionViewDiffableDataSource(_ collectionView: UICollectionView) -> UICollectionViewDiffableDataSource<Section2, DataSource> {
         // 레전더리 아이템 셀 등록
         let legendaryCellRegistration = UICollectionView.CellRegistration<LegendaryItemCell, Item> { cell, indexPath, item in
@@ -299,13 +304,14 @@ extension ViewController {
         
         // 가챠 결과 셀 등록
         let resultListCellRegistration = UICollectionView.CellRegistration<GachaResultCell, Item> { cell, indexPath, item in
-            var configuration = cell.defaultContentConfiguration()
+            let configuration = cell.defaultContentConfiguration()
             cell.contentConfiguration = configuration
             cell.config(with: item)
         }
         
-        // 헤더 뷰 등록
-        let headerRegistration = UICollectionView.SupplementaryRegistration<GachaCollectionHeaderView>(elementKind: "HeaderKind") { [weak self] supplementaryView, elementKind, indexPath in
+        // 헤더 뷰 등록        
+        let headerRegistration = UICollectionView.SupplementaryRegistration<GachaCollectionHeaderView>(elementKind: ElementKind.header) { [weak self] supplementaryView, elementKind, indexPath in
+
             guard let section = self?.dataSource.sectionIdentifier(for: indexPath.section) else {
                 fatalError("Cannot find section")
             }
@@ -314,15 +320,26 @@ extension ViewController {
         }
         
         // 푸터 뷰 등록
-        let footerRegistration = UICollectionView.SupplementaryRegistration<GachaCollectionFooterView>(elementKind: "FooterKind") { supplementaryView, elementKind, indexPath in
+        let footerRegistration = UICollectionView.SupplementaryRegistration<GachaCollectionFooterView>(elementKind: ElementKind.footer) { [weak self] supplementaryView, elementKind, indexPath in
+            
+            self?.mainView.gachaCollectionView.pageControl = supplementaryView.pageControl // 컬렉션뷰에서 footerView의 페이지컨트롤 참조
+//            
+//            supplementaryView.pageControl.numberOfPages =
+//            
+//            
+//                        // 전체 페이지 수 설정
+//                        footerView.pageControl.numberOfPages = switch dataSource[indexPath.section] {
+//                        case .first(let items):
+//                            items.count / 4
+//                        default: 0
+//                        }
             
         }
         
         // 뱃지 뷰 등록
-        let badgeRegistration = UICollectionView.SupplementaryRegistration<MesoBadgeView>(elementKind: "BadgeKind") { supplementaryView, elementKind, indexPath in
+        let badgeRegistration = UICollectionView.SupplementaryRegistration<MesoBadgeView>(elementKind: ElementKind.badge) { supplementaryView, elementKind, indexPath in
             supplementaryView.config(indexPath.item)
         }
-        
         
         // 데이터소스 설정
         let dataSource = UICollectionViewDiffableDataSource<Section2, DataSource>(collectionView: mainView.gachaCollectionView) { [weak self] (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: DataSource) in
@@ -355,21 +372,47 @@ extension ViewController {
         }
         
         // 헤더 뷰
-        dataSource.supplementaryViewProvider = { (collectionView: UICollectionView, elementKind: String, indexPath: IndexPath) -> UICollectionReusableView? in
-            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
+        dataSource.supplementaryViewProvider = {
+            guard $1 == ElementKind.header else {
+                return UICollectionReusableView()
+            }
+            
+            return $0.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: $2)
         }
         
         // 푸터 뷰
         dataSource.supplementaryViewProvider = { (collectionView: UICollectionView, elementKind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+            guard elementKind == ElementKind.footer else {
+                return nil
+            }
+
             return collectionView.dequeueConfiguredReusableSupplementary(using: footerRegistration, for: indexPath)
         }
         
         // 뱃지 뷰
-        dataSource.supplementaryViewProvider = {
-            $0.dequeueConfiguredReusableSupplementary(using: badgeRegistration, for: $2)
+        dataSource.supplementaryViewProvider = {(collectionView: UICollectionView, elementKind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+            guard elementKind == ElementKind.badge else {
+                return nil
+            }
+            return collectionView.dequeueConfiguredReusableSupplementary(using: badgeRegistration, for: indexPath)
         }
         
         return dataSource
+    }
+    
+    // 스냅샷 설정
+    private func setSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section2, DataSource>()
+        snapshot.appendSections([.legendaryItemList, .gachaButton, .resultTable]) // 섹션 등록
+        
+        let legendaryItemList = itemList.map { DataSource.legendaryItemList($0) }
+        let resultItemList = gachaResult.map { DataSource.resultTable($0) }
+        
+        snapshot.appendItems(legendaryItemList, toSection: .legendaryItemList)
+        snapshot.appendItems([.gachaButton("1번 뽑기"), .gachaButton("5번 뽑기")], toSection: .gachaButton)
+        snapshot.appendItems(resultItemList, toSection: .resultTable)
+
+        dataSource.apply(snapshot)
     }
 }
 

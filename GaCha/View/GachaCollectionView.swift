@@ -13,7 +13,7 @@ class GachaCollectionView: UICollectionView {
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         setAttribute()
-        registerCell()
+//        registerCell()
     }
     
     required init?(coder: NSCoder) {
@@ -54,7 +54,7 @@ extension GachaCollectionView {
                   widthDimension: .fractionalWidth(1),
                   heightDimension: .absolute(30)
               ),
-                  elementKind: "HeaderKind",
+                  elementKind: ElementKind.header,
                   alignment: .top
               )
             
@@ -63,17 +63,15 @@ extension GachaCollectionView {
                 widthDimension: .fractionalWidth(1),
                 heightDimension: .absolute(30)
             ),
-                elementKind: "FooterKind",
+                elementKind: ElementKind.footer,
                 alignment: .bottom
             )
-            
-            
             
             // section 레이아웃 설정
             switch section  {
             case 0:
                 let firstSection = self.setLegendaryListSection(environment)
-                firstSection.boundarySupplementaryItems = [headerItem, footerItem] // header, footer 등록
+//                firstSection.boundarySupplementaryItems = [headerItem, footerItem] // header, footer 등록
                 return firstSection
                 
             case 1:
@@ -81,7 +79,7 @@ extension GachaCollectionView {
                 
             case 2:
                 let thirdSection = self.setResultSection(environment)
-                thirdSection.boundarySupplementaryItems = [headerItem]
+//                thirdSection.boundarySupplementaryItems = [headerItem]
                 return thirdSection
                 
             default: return nil
@@ -161,7 +159,7 @@ extension GachaCollectionView {
         let badgeItemAnchor = NSCollectionLayoutAnchor(edges: [.top, .trailing], fractionalOffset: CGPoint(x: 0.4, y: -0.5))
         let badgeItem = NSCollectionLayoutSupplementaryItem(
             layoutSize: badgeItemSize,
-            elementKind: "BadgeKind",
+            elementKind: ElementKind.badge,
             containerAnchor: badgeItemAnchor
         )
         
@@ -192,7 +190,7 @@ extension GachaCollectionView {
     private func setResultSection(_ environment: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let configuration = UICollectionLayoutListConfiguration(appearance: .plain)
         let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: environment)
-
+        
         return section
     }
 }

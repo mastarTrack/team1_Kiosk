@@ -16,3 +16,12 @@ enum Section {
     case second([String])
     case third([Item])
 }
+
+enum ElementKind {
+    static let header = "HeaderKind"
+    static let footer = "FooterKind"
+    static let badge = "BadgeKind"
+//    case header = "HeaderKind"
+//    case footer = "FooterKind"
+//    case badge = "BadegeKind"
+}
