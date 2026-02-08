@@ -14,21 +14,24 @@ class MesoStackView: UIStackView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        let space = UILabel()
+        space.text = " "
+        
         // 타이틀 레이블 생성
         let title = makeCurrentMesoTitleLabel()
-        
-        // 타이틀 레이블 설정
-        title.textAlignment = .right // 텍스트 오른쪽정렬
+        let image = makeMesoImageView()
         
         setAttributes()
-        
         updateMeso()
         
+        addArrangedSubview(space)
+        addArrangedSubview(image)
         addArrangedSubview(title)
         addArrangedSubview(currentMesoLabel)
         
         axis = .horizontal
         spacing = 8
+
     }
     
     required init(coder: NSCoder) {
@@ -56,6 +59,7 @@ extension MesoStackView {
         label.text = "보유 메소"
         label.textColor = .black
         label.font = .boldSystemFont(ofSize: 16)
+        label.textAlignment = .right
         
         return label
     }
@@ -65,5 +69,16 @@ extension MesoStackView {
         currentMesoLabel.textColor = .black
         currentMesoLabel.font = .systemFont(ofSize: 16)
         currentMesoLabel.setContentHuggingPriority(.required, for: .horizontal) // 우선순위 설정
+    }
+    
+    // 보유 메소 타이틀 스택 생성
+    private func makeMesoImageView() -> UIImageView {
+        let image = UIImageView(image: .meso)
+        
+        image.snp.makeConstraints {
+            $0.width.equalTo(image.snp.height)
+        }
+        
+        return image
     }
 }
