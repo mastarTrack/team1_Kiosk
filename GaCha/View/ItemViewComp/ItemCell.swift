@@ -35,6 +35,8 @@ extension ItemCell {
         
         itemPriceLabel.font = .systemFont(ofSize: 14)
         itemPriceLabel.textColor = .darkGray
+        
+        contentView.backgroundColor = .apricot
     }
     
     private func setLayout() {
