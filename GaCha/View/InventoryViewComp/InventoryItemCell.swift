@@ -62,6 +62,9 @@ extension InventoryItemCell {
         stackView.alignment = .center
         stackView.spacing = 5
         
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 5)
+        
     }
     
     private func setLayout() {
@@ -101,6 +104,22 @@ extension InventoryItemCell {
         
         let formatter = FormatterManager()
         itemPriceLabel.text = formatter.setMesoToString(meso: purchaseItem.totalPrice)
+        
+        if purchaseItem.item.grade == "레전더리" {
+            contentView.backgroundColor = .mushroomOrange
+            itemNameLabel.textColor = .white
+            itemCountLabel.textColor = .white
+            itemPriceLabel.textColor = .white
+            sellButton.backgroundColor = .apricot
+            sellButton.setTitleColor(.mushroomOrange, for: .normal)
+        } else {
+            contentView.backgroundColor = .apricot
+            itemNameLabel.textColor = .black
+            itemCountLabel.textColor = .darkGray
+            itemPriceLabel.textColor = .darkGray
+            sellButton.backgroundColor = .mushroomOrange
+            sellButton.setTitleColor(.white, for: .normal)
+        }
     }
 }
 

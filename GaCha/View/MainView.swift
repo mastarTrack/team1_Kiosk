@@ -10,6 +10,9 @@ import SnapKit
 
 class MainView: UIView {
     
+    let cellHeight: CGFloat = 50
+    let rowsCount: CGFloat = 12
+    
     weak var delegate: MainViewDelegate?
     
     let mesoStack = MesoStackView()
@@ -65,11 +68,11 @@ class MainView: UIView {
         itemTableView.snp.makeConstraints {
             $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             $0.top.equalTo(categorySegment.snp.bottom).offset(10)
-            $0.bottom.equalTo(purchaseButton.snp.top).offset(-20)
+            $0.height.equalTo(cellHeight * rowsCount)
         }
         
         purchaseButton.snp.makeConstraints {
-            $0.bottom.equalTo(safeAreaLayoutGuide)
+            $0.top.equalTo(itemTableView.snp.bottom).offset(10)
             $0.trailing.equalTo(safeAreaLayoutGuide).offset(-20)
             $0.width.equalTo(100)
         }

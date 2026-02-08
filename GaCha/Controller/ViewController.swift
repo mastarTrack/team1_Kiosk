@@ -72,6 +72,7 @@ extension ViewController {
             mainView.purchaseButton.isHidden = false
             self.itemList = ItemData.allItems.filter {
                 $0.category == selectedCategory && $0.grade == "일반" }
+            mainView.itemTableView.setContentOffset(.zero, animated: false)
         }
     }
     
@@ -107,7 +108,9 @@ extension ViewController: UITableViewDataSource {
 }
 
 extension ViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
 }
 
 // GachaView CollectionView datasource 정의
