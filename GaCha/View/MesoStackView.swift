@@ -71,7 +71,7 @@ extension MesoStackView {
         currentMesoLabel.setContentHuggingPriority(.required, for: .horizontal) // 우선순위 설정
     }
     
-    // 보유 메소 타이틀 스택 생성
+    // 보유 메소 이미지 생성
     private func makeMesoImageView() -> UIImageView {
         let image = UIImageView(image: .meso)
         
