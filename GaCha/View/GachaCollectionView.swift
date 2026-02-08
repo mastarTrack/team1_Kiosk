@@ -48,11 +48,11 @@ extension GachaCollectionView {
         configuration.interSectionSpacing = 10
         backgroundColor = .white
         
-        return UICollectionViewCompositionalLayout(sectionProvider: { [unowned self] section, environment in
+        let layout = UICollectionViewCompositionalLayout(sectionProvider: { [unowned self] section, environment in
             // Header 설정
             let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(
                   widthDimension: .fractionalWidth(1),
-                  heightDimension: .absolute(30)
+                  heightDimension: .absolute(32)
               ),
                   elementKind: "HeaderKind",
                   alignment: .top
@@ -87,6 +87,9 @@ extension GachaCollectionView {
             default: return nil
             }
         }, configuration: configuration)
+        
+        layout.register(CollectionBackgroundView.self, forDecorationViewOfKind: "legendaryBackground")
+        return layout
     }
 }
 
@@ -95,55 +98,58 @@ extension GachaCollectionView {
     // 레전더리 아이템 목록 섹션 레이아웃
     private func setLegendaryListSection(_ environment: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         // 기본 설정
-          let spacing: CGFloat = 8
-          
-          // CollectionView 사이즈 - effectiveContentSize는 인셋 빼고 계산, 그냥 contentSize는 인셋 포함하여 계산
-          let containerSize = environment.container.effectiveContentSize
-          
+        let spacing: CGFloat = 8
+        
+        // CollectionView 사이즈 - effectiveContentSize는 인셋 빼고 계산, 그냥 contentSize는 인셋 포함하여 계산
+        let containerSize = environment.container.effectiveContentSize
+        
         // Item 설정
-          let itemSize = (containerSize.width) / 2 // 아이템 1개 가로 사이즈
-          let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
-              widthDimension: .absolute(itemSize),
-              heightDimension: .fractionalHeight(1)
-          ))
-          
+        let itemSize = (containerSize.width) / 2 // 아이템 1개 가로 사이즈
+        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
+            widthDimension: .absolute(itemSize),
+            heightDimension: .fractionalHeight(1)
+        ))
+        
         // Group 설정
-          // 내부 그룹(아이템 2개 표시 횡렬 그룹) 설정
-          let inLineGroup1 = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(
-              widthDimension: .fractionalWidth(1),
-              heightDimension: .absolute(itemSize * 0.7)
-              ),
-              repeatingSubitem: item,
-              count: 2
-          )
-          
-          let inLineGroup2 = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(
-              widthDimension: .fractionalWidth(1),
-              heightDimension: .absolute(itemSize * 0.7)
-              ),
-              repeatingSubitem: item,
-              count: 2
-          )
-          
-          // 전체 그룹 설정
-          let entireGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(
-              widthDimension: .fractionalWidth(1),
-              heightDimension: .absolute(itemSize * 1.4)
-          ),
-              subitems: [inLineGroup1, inLineGroup2]
-          )
-          
+        // 내부 그룹(아이템 2개 표시 횡렬 그룹) 설정
+        let inLineGroup1 = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .absolute(itemSize * 0.7)
+        ),
+                                                              repeatingSubitem: item,
+                                                              count: 2
+        )
+        
+        let inLineGroup2 = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .absolute(itemSize * 0.7)
+        ),
+                                                              repeatingSubitem: item,
+                                                              count: 2
+        )
+        
+        // 전체 그룹 설정
+        let entireGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .absolute(itemSize * 1.4)
+        ),
+                                                           subitems: [inLineGroup1, inLineGroup2]
+        )
+        
         // Section 설정
-          let section = NSCollectionLayoutSection(group: entireGroup)
-          section.interGroupSpacing = spacing * 3 // 그룹 간 공백 설정
-          section.orthogonalScrollingBehavior = .groupPaging // 그룹 간 스크롤 설정 - 페이징 형식
-          
-          section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, environment in
-              let currentPage = Int(max(0, contentOffset.x / containerSize.width)) // 현재 페이지 = 현재 스크롤 위치(x) / 컬렉션뷰 가로 길이
-              self?.pageControl?.currentPage = currentPage // 현재 페이지 변경
-          }
-          
-          return section
+        let section = NSCollectionLayoutSection(group: entireGroup)
+        section.interGroupSpacing = spacing * 3 // 그룹 간 공백 설정
+        section.orthogonalScrollingBehavior = .groupPaging // 그룹 간 스크롤 설정 - 페이징 형식
+        
+        section.visibleItemsInvalidationHandler = { [weak self] _, contentOffset, environment in
+            let currentPage = Int(max(0, contentOffset.x / containerSize.width)) // 현재 페이지 = 현재 스크롤 위치(x) / 컬렉션뷰 가로 길이
+            self?.pageControl?.currentPage = currentPage // 현재 페이지 변경
+        }
+        
+        // Background 설정
+        let sectionBackground = NSCollectionLayoutDecorationItem.background(elementKind: "legendaryBackground")
+        section.decorationItems = [sectionBackground]
+        return section
     }
     
     // 버튼 섹션 레이아웃
