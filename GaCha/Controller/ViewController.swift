@@ -236,12 +236,20 @@ extension ViewController: MainViewDelegate {
             sum + itemList[indexPath.row].price
         }
         
+        let firstItem = itemList[selectedPaths.first!.row].name
+        let extraCount = selectedPaths.count - 1
+        
         // 현재 메소와 비교하여 totalAmount보다 클 경우 구매
         if DataManager.shared.subtractMeso(amount: totalAmount) {
             for indexPath in selectedPaths {
                 let selectedItem = itemList[indexPath.row] // selectedPaths 배열에서 하나하나 뽑아온 데이터 selectedItem
                 DataManager.shared.addItemToInventory(item: selectedItem)
                 //            print("\(selectedItem.name) 구매")
+            }
+            if selectedPaths.count == 1 {
+                showPurchaseAlert(message: "\(firstItem)을 구매했습니다.")
+            } else {
+                showPurchaseAlert(message: "\(firstItem) 외 \(extraCount)개의 아이템을 구매했습니다.")
             }
             selectedPaths.forEach { mainView.itemTableView.deselectRow(at: $0, animated: true) } // 구매버튼 클릭 후 선택 풀기
             mainView.mesoStack.updateMeso()
@@ -253,6 +261,15 @@ extension ViewController: MainViewDelegate {
     func didTapInventoryButton() {
         let inventoryViewController = InventoryViewController()
         self.present(inventoryViewController, animated: true)
+    }
+}
+
+//구매 표시 Alert
+extension ViewController {
+    private func showPurchaseAlert(message: String) {
+        let alert = UIAlertController(title: "구매완료", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        present(alert, animated: true)
     }
 }
 
