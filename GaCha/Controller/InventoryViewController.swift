@@ -66,6 +66,12 @@ extension InventoryViewController: UITableViewDelegate {
 
 extension InventoryViewController: InventoryViewDelegate {
     func didTapSellAllButton() {
+        
+        if DataManager.shared.inventoryList.isEmpty {
+            showErrorAlert(message: "판매할 아이템이 없습니다.")
+            return
+        }
+        
         let alert = UIAlertController(title: "전체 판매", message: "아이템을 전부 판매하시겠습니까?", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "취소하기", style: .cancel)
         let confirm = UIAlertAction(title: "판매하기", style: .destructive) { [weak self] _ in

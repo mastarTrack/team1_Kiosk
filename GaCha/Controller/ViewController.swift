@@ -227,7 +227,7 @@ extension ViewController: UICollectionViewDelegate {
 extension ViewController: MainViewDelegate {
     func didTapPurchaseButton() {
         guard let selectedPaths = mainView.itemTableView.indexPathsForSelectedRows else {
-            print("선택된 아이템이 없습니다.") //TODO: 선택된 아이템없을 시 버튼 비활성화
+            showErrorAlert(message: "선택된 아이템이 없습니다.")
             return
         }
         
