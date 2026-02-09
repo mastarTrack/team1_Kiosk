@@ -76,6 +76,7 @@ extension InventoryViewController: InventoryViewDelegate {
         let cancel = UIAlertAction(title: "취소하기", style: .cancel)
         let confirm = UIAlertAction(title: "판매하기", style: .destructive) { [weak self] _ in
             self?.sellAllItem()
+            self?.showSellAlert(message: "아이템을 전체 판매했습니다.")
         }
         
         alert.addAction(cancel)
@@ -119,6 +120,7 @@ extension InventoryViewController: InventoryItemCellDelegate {
                 return
             }
             self?.sellItem(indexPath: indexPath, count: sellCount)
+            self?.showSellAlert(message: "\(selectedItem.item.name)을 \(sellCount)개 판매했습니다.")
         }
         
         alert.addAction(cancel)
@@ -145,6 +147,15 @@ extension InventoryViewController: InventoryItemCellDelegate {
         let originalEranedMeso = Double(selectedItem.item.price * count)
         let earnedMeso = Int(originalEranedMeso * 0.4)
         DataManager.shared.addMeso(amount: earnedMeso)
+    }
+}
+
+//구매 표시 Alert
+extension InventoryViewController {
+    private func showSellAlert(message: String) {
+        let alert = UIAlertController(title: "판매완료", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        present(alert, animated: true)
     }
 }
 
