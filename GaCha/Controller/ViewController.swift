@@ -72,6 +72,7 @@ extension ViewController {
             mainView.purchaseButton.isHidden = false
             self.itemList = ItemData.allItems.filter {
                 $0.category == selectedCategory && $0.grade == "일반" }
+            mainView.itemTableView.setContentOffset(.zero, animated: false)
         }
     }
     
@@ -107,7 +108,9 @@ extension ViewController: UITableViewDataSource {
 }
 
 extension ViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
 }
 
 // GachaView CollectionView datasource 정의
@@ -224,7 +227,7 @@ extension ViewController: UICollectionViewDelegate {
 extension ViewController: MainViewDelegate {
     func didTapPurchaseButton() {
         guard let selectedPaths = mainView.itemTableView.indexPathsForSelectedRows else {
-            print("선택된 아이템이 없습니다.") //TODO: 선택된 아이템없을 시 버튼 비활성화
+            showErrorAlert(message: "선택된 아이템이 없습니다.")
             return
         }
         
