@@ -38,7 +38,6 @@ class MainView: UIView {
         addSubview(purchaseButton)
         addSubview(gachaCollectionView)
         
-        
         titleLabel.snp.makeConstraints {
             $0.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             $0.top.equalTo(safeAreaLayoutGuide).offset(10)
