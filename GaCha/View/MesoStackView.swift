@@ -10,32 +10,36 @@ import SnapKit
 class MesoStackView: UIStackView {
     // 현재 보유 메소 레이블
     private let currentMesoLabel = UILabel()
+    private let mesoImageView = UIImageView(image: .meso)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         let space = UILabel()
         space.text = " "
+        space.setContentCompressionResistancePriority(.required, for: .horizontal)
         
-        // 타이틀 레이블 생성
-        let title = makeCurrentMesoTitleLabel()
-        let image = makeMesoImageView()
+        let titleStack = setTitleStackView()
         
         setAttributes()
         updateMeso()
         
         addArrangedSubview(space)
-        addArrangedSubview(image)
-        addArrangedSubview(title)
+        addArrangedSubview(titleStack)
         addArrangedSubview(currentMesoLabel)
         
         axis = .horizontal
         spacing = 8
-
     }
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // 메소 이미지 크기 조정 - 원본 크기의 70%
+        mesoImageView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
     }
 }
 
@@ -72,13 +76,19 @@ extension MesoStackView {
     }
     
     // 보유 메소 이미지 생성
-    private func makeMesoImageView() -> UIImageView {
-        let image = UIImageView(image: .meso)
+    private func setTitleStackView() -> UIStackView {
+        // 타이틀 레이블 생성
+        let title = makeCurrentMesoTitleLabel()
+        let stackView = UIStackView(arrangedSubviews: [mesoImageView, title])
         
-        image.snp.makeConstraints {
-            $0.width.equalTo(image.snp.height)
+        stackView.axis = .horizontal
+        stackView.spacing = 0
+        
+        title.setContentHuggingPriority(.required, for: .horizontal)
+        
+        mesoImageView.snp.makeConstraints {
+            $0.width.equalTo(mesoImageView.snp.height)
         }
-        
-        return image
+        return stackView
     }
 }
